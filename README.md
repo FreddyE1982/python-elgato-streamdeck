@@ -19,6 +19,8 @@ the images shown on each button, and read the current button states.
 Hot-plug monitoring lets applications react to Stream Decks being connected or
 removed at runtime, and a simple macro framework is included for mapping
 button presses to custom actions. The ``MacroDeck`` helper also provides
+A lightweight game framework lets you build simple games that use the deck's keys as graphics and input, via the ``Game`` base class and ``KeyFrameBuffer`` utilities.
+
 ``configure_key()`` for quickly assigning images, labels and callbacks to keys.
 
 Currently the following StreamDeck products are supported in multiple hardware
