@@ -54,6 +54,44 @@ class MacroDeck:
         """Remove the macro action associated with a touchscreen event."""
         self.touch_macros.pop(event, None)
 
+    def get_dial_macro(self, dial: int, event: DialEventType) -> Callable[[Any], Any] | str | None:
+        """Retrieve the macro action registered for a dial event, if any."""
+        return self.dial_macros.get((dial, event))
+
+    def get_touch_macro(self, event: TouchscreenEventType) -> Callable[[Any], Any] | str | None:
+        """Retrieve the macro action registered for a touchscreen event, if any."""
+        return self.touch_macros.get(event)
+
+    def update_dial_macro(self, dial: int, event: DialEventType, action: Callable[[Any], Any] | str | None) -> None:
+        """Update or remove the macro action for a dial event."""
+        if action is None:
+            self.unregister_dial_macro(dial, event)
+        else:
+            self.register_dial_macro(dial, event, action)
+
+    def update_touch_macro(self, event: TouchscreenEventType, action: Callable[[Any], Any] | str | None) -> None:
+        """Update or remove the macro action for a touchscreen event."""
+        if action is None:
+            self.unregister_touch_macro(event)
+        else:
+            self.register_touch_macro(event, action)
+
+    def configured_keys(self) -> list[int]:
+        """Return a list of keys that have a stored configuration."""
+        return list(self.key_configs.keys())
+
+    def macro_keys(self) -> list[int]:
+        """Return a list of keys with registered macros."""
+        return list(self.key_macros.keys())
+
+    def macro_dials(self) -> list[tuple[int, DialEventType]]:
+        """Return a list of dials with registered macros."""
+        return list(self.dial_macros.keys())
+
+    def macro_touches(self) -> list[TouchscreenEventType]:
+        """Return a list of touchscreen events with registered macros."""
+        return list(self.touch_macros.keys())
+
     def get_key_macro(self, key: int) -> Callable[[], Any] | str | None:
         """Retrieve the macro action registered for a key press, if any."""
         return self.key_macros.get(key)
@@ -98,7 +136,7 @@ class MacroDeck:
         self.key_configs.pop(key, None)
         self.unregister_key_macro(key)
         if self.deck.is_visual():
-            self.deck.set_key_image(key, None)
+            self.deck.set_key_image(key, None)  # type: ignore[arg-type]
 
     def configure_key(
         self,
