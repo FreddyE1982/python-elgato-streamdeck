@@ -29,6 +29,8 @@ Further helpers allow duplicating, moving or swapping key configurations and
 checking if a key already has a configuration. Additional helpers let you copy,
 move or swap just the registered macros and clear all stored key
 configurations in one call.
+Bulk helpers can configure or clear several keys at once, register
+multiple macros together and refresh stored images on the device.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:

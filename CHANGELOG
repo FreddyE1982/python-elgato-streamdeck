@@ -17,6 +17,11 @@ Version 0.9.12:
         - Added macro copy, move and swap helpers and a convenience to clear all
           key configurations.
 
+Version 0.9.13:
+        - Added helpers to register multiple macros and configure or clear
+          several keys at once.
+        - Added a helper to refresh stored key images on the device.
+
 Version 0.9.7:
         - Added type hints to public APIs.
         - Fixed leading whitespace in StreamDeck Plus serial number strings.
