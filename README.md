@@ -23,7 +23,8 @@ button presses to custom actions. The ``MacroDeck`` helper also provides
 Individual macros can be removed with ``unregister_*`` helpers and keys reset
 via ``clear_key_configuration()``. Additional ``get_*`` and ``update_*``
 helpers make it easy to query and modify existing key configurations and
-actions.
+actions, while new listing helpers provide insight into all configured keys and
+registered macros for keys, dials and touch events.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:
