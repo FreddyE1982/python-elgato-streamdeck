@@ -54,6 +54,45 @@ class MacroDeck:
         """Remove the macro action associated with a touchscreen event."""
         self.touch_macros.pop(event, None)
 
+    def get_key_macro(self, key: int) -> Callable[[], Any] | str | None:
+        """Retrieve the macro action registered for a key press, if any."""
+        return self.key_macros.get(key)
+
+    def get_key_configuration(self, key: int) -> dict[str, Any] | None:
+        """Return the stored configuration dictionary for a key, if present."""
+        return self.key_configs.get(key)
+
+    def update_key_macro(self, key: int, action: Callable[[], Any] | str | None) -> None:
+        """Update or remove the macro action for a key press."""
+        if action is None:
+            self.unregister_key_macro(key)
+        else:
+            self.register_key_macro(key, action)
+
+    def update_key_configuration(
+        self,
+        key: int,
+        upimage: str | None = None,
+        downimage: str | None = None,
+        uptext: str | None = None,
+        downtext: str | None = None,
+        pressedcallback: Callable[[], Any] | str | None = None,
+    ) -> None:
+        """Modify an existing key configuration.
+
+        This is an alias to :func:`configure_key` that can be used to update the
+        stored configuration for a key. Omitted parameters are left unchanged.
+        """
+
+        self.configure_key(
+            key,
+            upimage=upimage,
+            downimage=downimage,
+            uptext=uptext,
+            downtext=downtext,
+            pressedcallback=pressedcallback,
+        )
+
     def clear_key_configuration(self, key: int) -> None:
         """Clear key images and any associated macro callback."""
         self.key_configs.pop(key, None)

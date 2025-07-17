@@ -1,6 +1,10 @@
 Version 0.9.8:
         - Added macro unregister helpers and key configuration clearing.
 
+Version 0.9.9:
+        - Added key query and update helpers for ``MacroDeck`` to simplify key
+          management and modification.
+
 Version 0.9.7:
         - Added type hints to public APIs.
         - Fixed leading whitespace in StreamDeck Plus serial number strings.
