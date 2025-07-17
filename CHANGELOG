@@ -13,6 +13,10 @@ Version 0.9.11:
         - Added key configuration duplication, move and swap helpers for
           ``MacroDeck`` and a helper to test if a key is configured.
 
+Version 0.9.12:
+        - Added macro copy, move and swap helpers and a convenience to clear all
+          key configurations.
+
 Version 0.9.7:
         - Added type hints to public APIs.
         - Fixed leading whitespace in StreamDeck Plus serial number strings.
