@@ -8,7 +8,7 @@
 
 import subprocess
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Iterable
 from PIL import Image, ImageDraw, ImageFont
 
 from .ImageHelpers import PILHelper
@@ -194,6 +194,58 @@ class MacroDeck:
         keys = set(self.key_configs.keys()) | set(self.key_macros.keys())
         for key in list(keys):
             self.clear_key_configuration(key)
+
+    def register_key_macros(self, macros: dict[int, Callable[[], Any] | str]) -> None:
+        """Register multiple key macros in one call."""
+        for key, action in macros.items():
+            self.register_key_macro(key, action)
+
+    def unregister_key_macros(self, keys: Iterable[int]) -> None:
+        """Remove macros for the specified keys."""
+        for key in keys:
+            self.unregister_key_macro(key)
+
+    def configure_keys(self, configs: dict[int, dict[str, Any]]) -> None:
+        """Configure several keys in one call."""
+        for key, params in configs.items():
+            self.configure_key(
+                key,
+                upimage=params.get("upimage"),
+                downimage=params.get("downimage"),
+                uptext=params.get("uptext"),
+                downtext=params.get("downtext"),
+                pressedcallback=params.get("pressedcallback"),
+            )
+
+    def update_key_configurations_bulk(self, configs: dict[int, dict[str, Any]]) -> None:
+        """Update multiple key configurations at once."""
+        for key, params in configs.items():
+            self.update_key_configuration(
+                key,
+                upimage=params.get("upimage"),
+                downimage=params.get("downimage"),
+                uptext=params.get("uptext"),
+                downtext=params.get("downtext"),
+                pressedcallback=params.get("pressedcallback"),
+            )
+
+    def clear_key_configurations(self, keys: Iterable[int]) -> None:
+        """Clear the configurations for several keys."""
+        for key in keys:
+            self.clear_key_configuration(key)
+
+    def refresh_key_images(self, keys: Iterable[int] | None = None) -> None:
+        """Reapply stored images for the given keys."""
+        if not self.deck.is_visual():
+            return
+
+        target_keys = keys if keys is not None else self.key_configs.keys()
+        for key in target_keys:
+            config = self.key_configs.get(key)
+            if config and config.get("up_image") is not None:
+                self.deck.set_key_image(key, config["up_image"])
+            else:
+                self.deck.set_key_image(key, None)  # type: ignore[arg-type]
 
     def get_key_macro(self, key: int) -> Callable[[], Any] | str | None:
         """Retrieve the macro action registered for a key press, if any."""
