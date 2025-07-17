@@ -42,6 +42,25 @@ class MacroDeck:
         """Register a macro action for a touchscreen event."""
         self.touch_macros[event] = action
 
+    def unregister_key_macro(self, key: int) -> None:
+        """Remove any macro action associated with a key press."""
+        self.key_macros.pop(key, None)
+
+    def unregister_dial_macro(self, dial: int, event: DialEventType) -> None:
+        """Remove the macro action associated with a dial event."""
+        self.dial_macros.pop((dial, event), None)
+
+    def unregister_touch_macro(self, event: TouchscreenEventType) -> None:
+        """Remove the macro action associated with a touchscreen event."""
+        self.touch_macros.pop(event, None)
+
+    def clear_key_configuration(self, key: int) -> None:
+        """Clear key images and any associated macro callback."""
+        self.key_configs.pop(key, None)
+        self.unregister_key_macro(key)
+        if self.deck.is_visual():
+            self.deck.set_key_image(key, None)
+
     def configure_key(
         self,
         key: int,
