@@ -21,7 +21,9 @@ removed at runtime, and a simple macro framework is included for mapping
 button presses to custom actions. The ``MacroDeck`` helper also provides
 ``configure_key()`` for quickly assigning images, labels and callbacks to keys.
 Individual macros can be removed with ``unregister_*`` helpers and keys reset
-via ``clear_key_configuration()``.
+via ``clear_key_configuration()``. Additional ``get_*`` and ``update_*``
+helpers make it easy to query and modify existing key configurations and
+actions.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:
