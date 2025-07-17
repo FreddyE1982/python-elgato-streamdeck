@@ -92,6 +92,70 @@ class MacroDeck:
         """Return a list of touchscreen events with registered macros."""
         return list(self.touch_macros.keys())
 
+    def is_key_configured(self, key: int) -> bool:
+        """Return ``True`` if the given key has a stored configuration."""
+        return key in self.key_configs
+
+    def copy_key_configuration(self, source: int, destination: int) -> None:
+        """Copy the configuration and macro from one key to another."""
+        if source == destination:
+            return
+
+        config = self.key_configs.get(source)
+        if config is not None:
+            self.key_configs[destination] = dict(config)
+            if self.deck.is_visual() and config.get("up_image") is not None:
+                self.deck.set_key_image(destination, config["up_image"])
+
+        if source in self.key_macros:
+            self.key_macros[destination] = self.key_macros[source]
+
+    def move_key_configuration(self, source: int, destination: int) -> None:
+        """Move the configuration and macro from one key to another."""
+        self.copy_key_configuration(source, destination)
+        self.clear_key_configuration(source)
+
+    def swap_key_configurations(self, key_a: int, key_b: int) -> None:
+        """Swap the configurations and macros of two keys."""
+        if key_a == key_b:
+            return
+
+        config_a = self.key_configs.get(key_a)
+        config_b = self.key_configs.get(key_b)
+        macro_a = self.key_macros.get(key_a)
+        macro_b = self.key_macros.get(key_b)
+
+        if config_a is not None:
+            self.key_configs[key_b] = dict(config_a)
+        else:
+            self.key_configs.pop(key_b, None)
+
+        if config_b is not None:
+            self.key_configs[key_a] = dict(config_b)
+        else:
+            self.key_configs.pop(key_a, None)
+
+        if macro_a is not None:
+            self.key_macros[key_b] = macro_a
+        else:
+            self.key_macros.pop(key_b, None)
+
+        if macro_b is not None:
+            self.key_macros[key_a] = macro_b
+        else:
+            self.key_macros.pop(key_a, None)
+
+        if self.deck.is_visual():
+            if config_a and config_a.get("up_image") is not None:
+                self.deck.set_key_image(key_b, config_a["up_image"])
+            else:
+                self.deck.set_key_image(key_b, None)  # type: ignore[arg-type]
+
+            if config_b and config_b.get("up_image") is not None:
+                self.deck.set_key_image(key_a, config_b["up_image"])
+            else:
+                self.deck.set_key_image(key_a, None)  # type: ignore[arg-type]
+
     def get_key_macro(self, key: int) -> Callable[[], Any] | str | None:
         """Retrieve the macro action registered for a key press, if any."""
         return self.key_macros.get(key)
