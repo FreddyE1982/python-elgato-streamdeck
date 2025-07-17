@@ -26,7 +26,9 @@ helpers make it easy to query and modify existing key configurations and
 actions, while new listing helpers provide insight into all configured keys and
 registered macros for keys, dials and touch events.
 Further helpers allow duplicating, moving or swapping key configurations and
-checking if a key already has a configuration.
+checking if a key already has a configuration. Additional helpers let you copy,
+move or swap just the registered macros and clear all stored key
+configurations in one call.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:

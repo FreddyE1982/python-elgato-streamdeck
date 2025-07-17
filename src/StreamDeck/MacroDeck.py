@@ -156,6 +156,45 @@ class MacroDeck:
             else:
                 self.deck.set_key_image(key_a, None)  # type: ignore[arg-type]
 
+    def copy_key_macro(self, source: int, destination: int) -> None:
+        """Copy the macro from one key to another."""
+        if source == destination:
+            return
+
+        if source in self.key_macros:
+            self.key_macros[destination] = self.key_macros[source]
+        else:
+            self.key_macros.pop(destination, None)
+
+    def move_key_macro(self, source: int, destination: int) -> None:
+        """Move the macro from one key to another."""
+        self.copy_key_macro(source, destination)
+        self.unregister_key_macro(source)
+
+    def swap_key_macros(self, key_a: int, key_b: int) -> None:
+        """Swap the macros of two keys."""
+        if key_a == key_b:
+            return
+
+        macro_a = self.key_macros.get(key_a)
+        macro_b = self.key_macros.get(key_b)
+
+        if macro_a is not None:
+            self.key_macros[key_b] = macro_a
+        else:
+            self.key_macros.pop(key_b, None)
+
+        if macro_b is not None:
+            self.key_macros[key_a] = macro_b
+        else:
+            self.key_macros.pop(key_a, None)
+
+    def clear_all_key_configurations(self) -> None:
+        """Clear the configurations and macros for all keys."""
+        keys = set(self.key_configs.keys()) | set(self.key_macros.keys())
+        for key in list(keys):
+            self.clear_key_configuration(key)
+
     def get_key_macro(self, key: int) -> Callable[[], Any] | str | None:
         """Retrieve the macro action registered for a key press, if any."""
         return self.key_macros.get(key)
