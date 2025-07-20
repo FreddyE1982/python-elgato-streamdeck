@@ -27,6 +27,8 @@ class MacroDeck:
         self.touch_macros: dict[TouchscreenEventType, Callable[[Any], Any] | str] = {}
         self.key_configs: dict[int, dict[str, Any]] = {}
         self.enabled: bool = True
+        self.board: list[list[str]] | None = None
+        self._loop_running: bool = False
 
         self.deck.set_key_callback(self._handle_key)
         self.deck.set_dial_callback(self._handle_dial)
@@ -391,6 +393,50 @@ class MacroDeck:
                 if row < len(board) and col < len(board[row]):
                     char = board[row][col]
                 self.set_key_text(self.position_to_key(row, col), char)
+
+    # Board helpers -----------------------------------------------------
+    def create_board(self, fill: str = " ") -> None:
+        """Create an internal character board and display it."""
+        self.board = [[fill for _ in range(self.deck.KEY_COLS)] for _ in range(self.deck.KEY_ROWS)]
+        self.display_board(self.board)
+
+    def clear_board(self, fill: str = " ") -> None:
+        """Clear the internal board to ``fill`` and redraw it."""
+        if self.board is None:
+            self.create_board(fill)
+            return
+        for row in range(self.deck.KEY_ROWS):
+            for col in range(self.deck.KEY_COLS):
+                self.board[row][col] = fill
+        self.display_board(self.board)
+
+    def set_board_char(self, row: int, col: int, char: str) -> None:
+        """Set a character on the internal board at ``(row, col)``."""
+        if self.board is None:
+            self.create_board()
+        if not (0 <= row < self.deck.KEY_ROWS) or not (0 <= col < self.deck.KEY_COLS):
+            raise IndexError("Invalid row or column")
+        self.board[row][col] = char
+        self.set_key_text(self.position_to_key(row, col), char)
+
+    def get_board_char(self, row: int, col: int) -> str:
+        """Return the character stored at ``(row, col)``."""
+        if self.board is None:
+            raise ValueError("Board not initialised")
+        if not (0 <= row < self.deck.KEY_ROWS) or not (0 <= col < self.deck.KEY_COLS):
+            raise IndexError("Invalid row or column")
+        return self.board[row][col]
+
+    def get_board(self) -> list[list[str]]:
+        """Return a copy of the internal character board."""
+        if self.board is None:
+            raise ValueError("Board not initialised")
+        return [list(r) for r in self.board]
+
+    def refresh_board(self) -> None:
+        """Redraw the internal board on the deck."""
+        if self.board is not None:
+            self.display_board(self.board)
 
     def wait_for_char_press(
         self, char_map: dict[int, str], timeout: float | None = None

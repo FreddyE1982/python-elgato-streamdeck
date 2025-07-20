@@ -38,6 +38,8 @@ and ``wait_for_key_press()`` help reading user input for deck-only games.
 ``position_to_key()`` and ``key_to_position()`` convert between key indexes and grid
 positions. ``display_board()`` renders a 2D array of characters, and
 ``wait_for_char_press()`` returns the character associated with a pressed key.
+``create_board()`` and related helpers manage a persistent character grid for
+deck-only games, allowing individual cells to be updated and redrawn easily.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:
