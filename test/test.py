@@ -242,6 +242,26 @@ def test_board_string_helpers(deck):
     assert mdeck.get_board_char(1, 0) == "Z"
 
 
+def test_image_board(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    img = PILHelper.to_native_key_format(deck, PILHelper.create_key_image(deck))
+    board = [[img for _ in range(deck.KEY_COLS)] for _ in range(deck.KEY_ROWS)]
+
+    with deck:
+        deck.open()
+        mdeck.create_image_board()
+        mdeck.set_board_image(0, 0, img)
+        stored = mdeck.get_board_image(0, 0)
+        mdeck.display_image_board(board)
+        mdeck.scroll_image_board(1, 0)
+        deck.close()
+
+    assert stored == img
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
 
@@ -274,6 +294,7 @@ if __name__ == "__main__":
         "Board Draw": test_board_draw_scroll,
         "Draw Line": test_draw_line,
         "Board Strings": test_board_string_helpers,
+        "Image Board": test_image_board,
     }
 
     test_runners = tests
