@@ -274,6 +274,22 @@ def test_deck_image_helpers(deck):
     assert isinstance(next(iter(tiles.values())), bytes)
 
 
+def test_display_deck_image(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    img = PILHelper.create_key_image(deck)
+    deck_img = PILHelper.create_deck_sized_image(deck, img)
+
+    with deck:
+        deck.open()
+        mdeck.display_deck_image(deck_img)
+        deck.close()
+
+    assert mdeck.image_board is not None
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
 
@@ -308,6 +324,7 @@ if __name__ == "__main__":
         "Board Strings": test_board_string_helpers,
         "Image Board": test_image_board,
         "Deck Image Helpers": test_deck_image_helpers,
+        "Display Deck Image": test_display_deck_image,
     }
 
     test_runners = tests
