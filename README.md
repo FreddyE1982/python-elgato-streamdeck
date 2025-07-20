@@ -131,3 +131,12 @@ list above, please let me know.
 ## License:
 
 Released under the [MIT license](LICENSE).
+
+## Running Tests
+
+The unit tests require no hardware and run entirely against a virtual Stream Deck device using the library\x27s dummy transport layer. To execute the test suite run:
+
+```bash
+pytest
+```
+
