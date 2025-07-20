@@ -176,6 +176,24 @@ def test_game_helpers(deck):
     assert char is None
 
 
+def test_board_state(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    with deck:
+        deck.open()
+        mdeck.create_board()
+        mdeck.set_board_char(0, 0, "A")
+        char = mdeck.get_board_char(0, 0)
+        board = mdeck.get_board()
+        mdeck.refresh_board()
+        deck.close()
+
+    assert char == "A"
+    assert board[0][0] == "A"
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
 
@@ -204,6 +222,7 @@ if __name__ == "__main__":
         "Set Key Text": test_set_key_text,
         "Display Text": test_display_text_and_wait,
         "Game Helpers": test_game_helpers,
+        "Board State": test_board_state,
     }
 
     test_runners = tests
