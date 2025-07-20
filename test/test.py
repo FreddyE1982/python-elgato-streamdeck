@@ -302,11 +302,26 @@ def test_key_image_helpers(deck):
         mdeck.set_key_image_bytes(0, img)
         stored = mdeck.get_key_image(0)
         has = mdeck.has_key_image(0)
+        mdeck.copy_key_image(0, 1)
+        copied = mdeck.get_key_image(1)
+        mdeck.move_key_image(1, 2)
+        moved = mdeck.get_key_image(2)
+        moved_from = mdeck.get_key_image(1)
+        img2 = PILHelper.to_native_key_format(deck, PILHelper.create_key_image(deck))
+        mdeck.set_key_image_bytes(3, img2)
+        mdeck.swap_key_images(2, 3)
+        swapped_a = mdeck.get_key_image(2)
+        swapped_b = mdeck.get_key_image(3)
         mdeck.clear_key_image(0)
         deck.close()
 
     assert stored == img
     assert has
+    assert copied == img
+    assert moved == img
+    assert moved_from is None
+    assert swapped_a == img2
+    assert swapped_b == img
     assert mdeck.get_key_image(0) is None
 
 

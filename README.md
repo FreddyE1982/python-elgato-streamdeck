@@ -33,7 +33,7 @@ re-enabled with ``disable()`` and ``enable()``.
 Bulk helpers can configure or clear several keys at once, register
 multiple macros together and refresh stored images on the device.
 ``run_loop()`` provides a simple game loop for deck-only games and ``set_key_text()`` displays text directly on a key.
-``set_key_image_file()`` and ``set_key_image_pil()`` simplify showing images on individual keys. ``set_key_image_bytes()`` accepts pre-formatted images and ``get_key_image()``, ``has_key_image()`` and ``clear_key_image()`` help manage stored key images.
+``set_key_image_file()`` and ``set_key_image_pil()`` simplify showing images on individual keys. ``set_key_image_bytes()`` accepts pre-formatted images and ``get_key_image()``, ``has_key_image()``, ``clear_key_image()``, ``copy_key_image()``, ``move_key_image()`` and ``swap_key_images()`` help manage stored key images.
 ``display_text()`` draws multi-line text across the deck while ``get_pressed_keys()``
 and ``wait_for_key_press()`` help reading user input for deck-only games.
 ``position_to_key()`` and ``key_to_position()`` convert between key indexes and grid

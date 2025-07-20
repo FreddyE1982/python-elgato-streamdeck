@@ -38,6 +38,10 @@ Version 0.9.17:
         - Added ``create_board_from_strings()``, ``get_board_as_strings()`` and
           ``draw_multiline_text()`` helpers for deck-only games.
 
+Version 0.9.18:
+        - Added ``copy_key_image()``, ``move_key_image()`` and
+          ``swap_key_images()`` helpers for single key image management.
+
 Version 0.9.7:
         - Added type hints to public APIs.
         - Fixed leading whitespace in StreamDeck Plus serial number strings.

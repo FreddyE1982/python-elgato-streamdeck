@@ -401,6 +401,29 @@ class MacroDeck:
         if self.deck.is_visual():
             self.deck.set_key_image(key, None)
 
+    def copy_key_image(self, source: int, destination: int, pressed: bool = False) -> None:
+        """Copy the image from ``source`` key to ``destination`` key."""
+        if source == destination:
+            return
+
+        img = self.get_key_image(source, pressed)
+        self.set_key_image_bytes(destination, img, pressed)
+
+    def move_key_image(self, source: int, destination: int, pressed: bool = False) -> None:
+        """Move the image from ``source`` key to ``destination`` key."""
+        self.copy_key_image(source, destination, pressed)
+        self.clear_key_image(source, pressed)
+
+    def swap_key_images(self, key_a: int, key_b: int, pressed: bool = False) -> None:
+        """Swap the images of ``key_a`` and ``key_b``."""
+        if key_a == key_b:
+            return
+
+        img_a = self.get_key_image(key_a, pressed)
+        img_b = self.get_key_image(key_b, pressed)
+        self.set_key_image_bytes(key_a, img_b, pressed)
+        self.set_key_image_bytes(key_b, img_a, pressed)
+
     def get_pressed_keys(self) -> list[int]:
         """Return a list of keys that are currently pressed."""
         return [i for i, state in enumerate(self.deck.key_states()) if state]
