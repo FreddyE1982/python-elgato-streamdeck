@@ -7,6 +7,7 @@
 """Simple macro framework for StreamDeck devices."""
 
 import subprocess
+import time
 from collections.abc import Callable
 from typing import Any, Iterable
 from PIL import Image, ImageDraw, ImageFont
@@ -336,6 +337,42 @@ class MacroDeck:
 
         if config.get("up_image") is not None:
             self.deck.set_key_image(key, config["up_image"])
+
+    def set_key_text(self, key: int, text: str, pressed: bool = False) -> None:
+        """Display the given text on a key."""
+        if pressed:
+            self.update_key_configuration(key, downtext=text)
+        else:
+            self.update_key_configuration(key, uptext=text)
+
+    def run_loop(
+        self,
+        frame_callback: Callable[["MacroDeck", float], bool] | None = None,
+        fps: int = 30,
+    ) -> None:
+        """Run a simple blocking game loop using the deck."""
+        frame_time = 1.0 / max(fps, 1)
+        self._loop_running = True
+        last = time.time()
+        self.deck.open()
+        try:
+            while self._loop_running:
+                now = time.time()
+                delta = now - last
+                last = now
+                if frame_callback is not None:
+                    if frame_callback(self, delta) is False:
+                        break
+                sleep_time = frame_time - (time.time() - now)
+                if sleep_time > 0:
+                    time.sleep(sleep_time)
+        finally:
+            self._loop_running = False
+            self.deck.close()
+
+    def stop_loop(self) -> None:
+        """Terminate a running game loop started with :func:`run_loop`."""
+        self._loop_running = False
 
     # Internal handlers ---------------------------------------------------
     def _run_action(self, action: Callable | str, *args: Any) -> None:
