@@ -262,6 +262,18 @@ def test_image_board(deck):
     assert stored == img
 
 
+def test_deck_image_helpers(deck):
+    if not deck.is_visual():
+        return
+
+    src = PILHelper.create_key_image(deck)
+    deck_img = PILHelper.create_deck_sized_image(deck, src)
+    tiles = PILHelper.split_deck_image(deck, deck_img)
+
+    assert len(tiles) == deck.key_count()
+    assert isinstance(next(iter(tiles.values())), bytes)
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
 
@@ -295,6 +307,7 @@ if __name__ == "__main__":
         "Draw Line": test_draw_line,
         "Board Strings": test_board_string_helpers,
         "Image Board": test_image_board,
+        "Deck Image Helpers": test_deck_image_helpers,
     }
 
     test_runners = tests
