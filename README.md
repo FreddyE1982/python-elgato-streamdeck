@@ -48,6 +48,8 @@ populates a board from lines of text, ``get_board_as_strings()`` returns the boa
 as text and ``draw_multiline_text()`` overlays several lines at once.
 ``create_image_board()`` and related helpers manage a board of key images for
 deck-only games, allowing graphics to be scrolled or overlaid easily.
+``display_deck_image()`` scales a single image across the entire deck and updates the
+internal image board for further manipulation.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:

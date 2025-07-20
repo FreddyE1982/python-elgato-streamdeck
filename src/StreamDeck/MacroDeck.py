@@ -673,6 +673,43 @@ class MacroDeck:
         self.image_board = new_board
         self.refresh_image_board()
 
+    def display_deck_image(
+        self, image: Image.Image, key_spacing: tuple[int, int] = (0, 0)
+    ) -> None:
+        """Display ``image`` scaled across the entire deck surface.
+
+        The image will be automatically resized to fit the deck and then
+        split into per-key tiles before being sent to the device. The
+        ``image_board`` state is updated so that the displayed graphics can be
+        further manipulated with the other image board helpers.
+
+        Parameters
+        ----------
+        image
+            Source PIL image to display.
+        key_spacing
+            Horizontal and vertical pixel spacing between keys, used when
+            computing the deck surface size.
+        """
+
+        if not self.deck.is_visual():
+            return
+
+        deck_img = PILHelper.create_deck_sized_image(self.deck, image, key_spacing)
+        tiles = PILHelper.split_deck_image(self.deck, deck_img, key_spacing)
+
+        board: list[list[bytes | None]] = []
+        for r in range(self.deck.KEY_ROWS):
+            row_imgs: list[bytes | None] = []
+            for c in range(self.deck.KEY_COLS):
+                key = self.position_to_key(r, c)
+                tile = tiles[key]
+                self.deck.set_key_image(key, tile)
+                row_imgs.append(tile)
+            board.append(row_imgs)
+
+        self.image_board = board
+
     def wait_for_char_press(
         self, char_map: dict[int, str], timeout: float | None = None
     ) -> str | None:
