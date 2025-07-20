@@ -126,6 +126,18 @@ class MacroDeck:
         """Return a list of touchscreen events with registered macros."""
         return list(self.touch_macros.keys())
 
+    def has_key_macro(self, key: int) -> bool:
+        """Return ``True`` if ``key`` has a macro registered."""
+        return key in self.key_macros
+
+    def has_dial_macro(self, dial: int, event: DialEventType) -> bool:
+        """Return ``True`` if ``dial``/``event`` has a macro registered."""
+        return (dial, event) in self.dial_macros
+
+    def has_touch_macro(self, event: TouchscreenEventType) -> bool:
+        """Return ``True`` if ``event`` has a macro registered."""
+        return event in self.touch_macros
+
     def is_key_configured(self, key: int) -> bool:
         """Return ``True`` if the given key has a stored configuration."""
         return key in self.key_configs

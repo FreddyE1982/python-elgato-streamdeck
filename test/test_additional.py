@@ -26,22 +26,29 @@ def test_macrodeck_macro_management(deck):
     mdeck.register_key_macro(0, action)
     assert mdeck.get_key_macro(0) is action
     assert mdeck.macro_keys() == [0]
+    assert mdeck.has_key_macro(0)
 
     mdeck.update_key_macro(0, None)
     assert mdeck.get_key_macro(0) is None
+    assert not mdeck.has_key_macro(0)
 
     mdeck.update_key_macro(1, action)
     assert mdeck.get_key_macro(1) is action
+    assert mdeck.has_key_macro(1)
 
     mdeck.register_dial_macro(0, DialEventType.PUSH, action)
     assert mdeck.get_dial_macro(0, DialEventType.PUSH) is action
+    assert mdeck.has_dial_macro(0, DialEventType.PUSH)
     mdeck.update_dial_macro(0, DialEventType.PUSH, None)
     assert mdeck.get_dial_macro(0, DialEventType.PUSH) is None
+    assert not mdeck.has_dial_macro(0, DialEventType.PUSH)
 
     mdeck.register_touch_macro(TouchscreenEventType.SHORT, action)
     assert mdeck.get_touch_macro(TouchscreenEventType.SHORT) is action
+    assert mdeck.has_touch_macro(TouchscreenEventType.SHORT)
     mdeck.update_touch_macro(TouchscreenEventType.SHORT, None)
     assert mdeck.get_touch_macro(TouchscreenEventType.SHORT) is None
+    assert not mdeck.has_touch_macro(TouchscreenEventType.SHORT)
 
 
 def test_macrodeck_copy_move_swap_macros(deck):
