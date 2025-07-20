@@ -40,6 +40,8 @@ positions. ``display_board()`` renders a 2D array of characters, and
 ``wait_for_char_press()`` returns the character associated with a pressed key.
 ``create_board()`` and related helpers manage a persistent character grid for
 deck-only games, allowing individual cells to be updated and redrawn easily.
+``scroll_board()``, ``draw_rect()`` and ``fill_rect()`` provide additional
+helpers for moving and drawing on the board.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:
