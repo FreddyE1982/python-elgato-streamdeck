@@ -464,6 +464,53 @@ class MacroDeck:
                     self.board[rr][cc] = char
                     self.set_key_text(self.position_to_key(rr, cc), char)
 
+    def scroll_board(self, dx: int = 0, dy: int = 0, fill: str = " ") -> None:
+        """Scroll the board by ``(dx, dy)`` and fill empty cells with ``fill``."""
+        if self.board is None:
+            self.create_board(fill)
+
+        new_board = [[fill for _ in range(self.deck.KEY_COLS)] for _ in range(self.deck.KEY_ROWS)]
+
+        for r in range(self.deck.KEY_ROWS):
+            for c in range(self.deck.KEY_COLS):
+                nr = r + dy
+                nc = c + dx
+                if 0 <= nr < self.deck.KEY_ROWS and 0 <= nc < self.deck.KEY_COLS:
+                    new_board[nr][nc] = self.board[r][c]
+
+        self.board = new_board
+        self.refresh_board()
+
+    def draw_rect(self, top: int, left: int, height: int, width: int, char: str) -> None:
+        """Draw a rectangle on the board using ``char``."""
+        if self.board is None:
+            self.create_board()
+
+        for r in range(top, top + height):
+            if 0 <= r < self.deck.KEY_ROWS:
+                if 0 <= left < self.deck.KEY_COLS:
+                    self.set_board_char(r, left, char)
+                if 0 <= left + width - 1 < self.deck.KEY_COLS:
+                    self.set_board_char(r, left + width - 1, char)
+
+        for c in range(left, left + width):
+            if 0 <= c < self.deck.KEY_COLS:
+                if 0 <= top < self.deck.KEY_ROWS:
+                    self.set_board_char(top, c, char)
+                if 0 <= top + height - 1 < self.deck.KEY_ROWS:
+                    self.set_board_char(top + height - 1, c, char)
+
+    def fill_rect(self, top: int, left: int, height: int, width: int, char: str) -> None:
+        """Fill a rectangular region on the board with ``char``."""
+        if self.board is None:
+            self.create_board()
+
+        for r in range(top, top + height):
+            if 0 <= r < self.deck.KEY_ROWS:
+                for c in range(left, left + width):
+                    if 0 <= c < self.deck.KEY_COLS:
+                        self.set_board_char(r, c, char)
+
     def wait_for_char_press(
         self, char_map: dict[int, str], timeout: float | None = None
     ) -> str | None:

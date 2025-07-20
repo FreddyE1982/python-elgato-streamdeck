@@ -196,6 +196,22 @@ def test_board_state(deck):
     assert board[0][0] == "A"
 
 
+def test_board_draw_scroll(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    with deck:
+        deck.open()
+        mdeck.create_board()
+        mdeck.fill_rect(0, 0, 2, 2, "A")
+        mdeck.draw_rect(0, 0, 2, 2, "B")
+        mdeck.scroll_board(1, 1)
+        deck.close()
+
+    assert mdeck.get_board_char(1, 1) == "B"
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
 
@@ -225,6 +241,7 @@ if __name__ == "__main__":
         "Display Text": test_display_text_and_wait,
         "Game Helpers": test_game_helpers,
         "Board State": test_board_state,
+        "Board Draw": test_board_draw_scroll,
     }
 
     test_runners = tests
