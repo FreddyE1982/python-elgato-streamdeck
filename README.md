@@ -41,7 +41,9 @@ positions. ``display_board()`` renders a 2D array of characters, and
 ``create_board()`` and related helpers manage a persistent character grid for
 deck-only games, allowing individual cells to be updated and redrawn easily.
 ``scroll_board()``, ``draw_line()``, ``draw_rect()`` and ``fill_rect()`` provide additional
-helpers for moving and drawing on the board.
+helpers for moving and drawing on the board. ``create_board_from_strings()`` quickly
+populates a board from lines of text, ``get_board_as_strings()`` returns the board
+as text and ``draw_multiline_text()`` overlays several lines at once.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:

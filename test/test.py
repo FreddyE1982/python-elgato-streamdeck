@@ -226,6 +226,22 @@ def test_draw_line(deck):
     assert mdeck.get_board_char(deck.KEY_ROWS - 1, deck.KEY_COLS - 1) == "C"
 
 
+def test_board_string_helpers(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    with deck:
+        deck.open()
+        mdeck.create_board_from_strings(["AB", "CD"])
+        lines = mdeck.get_board_as_strings()
+        mdeck.draw_multiline_text(0, 0, ["XY", "Z"])
+        deck.close()
+
+    assert lines[0].startswith("AB")
+    assert mdeck.get_board_char(1, 0) == "Z"
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
 
@@ -257,6 +273,7 @@ if __name__ == "__main__":
         "Board State": test_board_state,
         "Board Draw": test_board_draw_scroll,
         "Draw Line": test_draw_line,
+        "Board Strings": test_board_string_helpers,
     }
 
     test_runners = tests
