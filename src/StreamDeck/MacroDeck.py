@@ -367,6 +367,40 @@ class MacroDeck:
         if self.deck.is_visual():
             self.deck.set_key_image(key, img)
 
+    def set_key_image_bytes(self, key: int, image: bytes | None, pressed: bool = False) -> None:
+        """Display a pre-formatted image on a key."""
+        config = self.key_configs.get(key, {"up_image": None, "down_image": None})
+        if pressed:
+            config["down_image"] = image
+        else:
+            config["up_image"] = image
+        self.key_configs[key] = config
+        if self.deck.is_visual():
+            self.deck.set_key_image(key, image)
+
+    def get_key_image(self, key: int, pressed: bool = False) -> bytes | None:
+        """Return the stored image for ``key`` if present."""
+        config = self.key_configs.get(key)
+        if config is None:
+            return None
+        return config.get("down_image" if pressed else "up_image")
+
+    def has_key_image(self, key: int, pressed: bool = False) -> bool:
+        """Return ``True`` if ``key`` has an image stored."""
+        return self.get_key_image(key, pressed) is not None
+
+    def clear_key_image(self, key: int, pressed: bool | None = None) -> None:
+        """Remove stored images from ``key`` without altering its macro."""
+        config = self.key_configs.get(key)
+        if config is None:
+            return
+        if pressed is None or not pressed:
+            config["up_image"] = None
+        if pressed is None or pressed:
+            config["down_image"] = None
+        if self.deck.is_visual():
+            self.deck.set_key_image(key, None)
+
     def get_pressed_keys(self) -> list[int]:
         """Return a list of keys that are currently pressed."""
         return [i for i, state in enumerate(self.deck.key_states()) if state]

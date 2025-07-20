@@ -290,6 +290,26 @@ def test_display_deck_image(deck):
     assert mdeck.image_board is not None
 
 
+def test_key_image_helpers(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    img = PILHelper.to_native_key_format(deck, PILHelper.create_key_image(deck))
+
+    with deck:
+        deck.open()
+        mdeck.set_key_image_bytes(0, img)
+        stored = mdeck.get_key_image(0)
+        has = mdeck.has_key_image(0)
+        mdeck.clear_key_image(0)
+        deck.close()
+
+    assert stored == img
+    assert has
+    assert mdeck.get_key_image(0) is None
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
 
@@ -325,6 +345,7 @@ if __name__ == "__main__":
         "Image Board": test_image_board,
         "Deck Image Helpers": test_deck_image_helpers,
         "Display Deck Image": test_display_deck_image,
+        "Key Image Helpers": test_key_image_helpers,
     }
 
     test_runners = tests
