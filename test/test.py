@@ -157,6 +157,25 @@ def test_display_text_and_wait(deck):
     assert pressed is None
 
 
+def test_game_helpers(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    board = [["X" for _ in range(deck.KEY_COLS)] for _ in range(deck.KEY_ROWS)]
+
+    with deck:
+        deck.open()
+        mdeck.display_board(board)
+        pos = mdeck.key_to_position(0)
+        idx = mdeck.position_to_key(*pos)
+        char = mdeck.wait_for_char_press({0: "A"}, timeout=0)
+        deck.close()
+
+    assert idx == 0
+    assert char is None
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
 
@@ -184,6 +203,7 @@ if __name__ == "__main__":
         "Run Loop": test_run_loop,
         "Set Key Text": test_set_key_text,
         "Display Text": test_display_text_and_wait,
+        "Game Helpers": test_game_helpers,
     }
 
     test_runners = tests

@@ -35,6 +35,9 @@ multiple macros together and refresh stored images on the device.
 ``run_loop()`` provides a simple game loop for deck-only games and ``set_key_text()`` displays text directly on a key.
 ``display_text()`` draws multi-line text across the deck while ``get_pressed_keys()``
 and ``wait_for_key_press()`` help reading user input for deck-only games.
+``position_to_key()`` and ``key_to_position()`` convert between key indexes and grid
+positions. ``display_board()`` renders a 2D array of characters, and
+``wait_for_char_press()`` returns the character associated with a pressed key.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:

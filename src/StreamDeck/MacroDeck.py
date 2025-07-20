@@ -371,6 +371,36 @@ class MacroDeck:
                 char = line[col] if col < len(line) else ""
                 self.set_key_text(key, char)
 
+    def position_to_key(self, row: int, col: int) -> int:
+        """Return the key index for a given ``(row, column)`` position."""
+        if not (0 <= row < self.deck.KEY_ROWS) or not (0 <= col < self.deck.KEY_COLS):
+            raise IndexError("Invalid row or column")
+        return row * self.deck.KEY_COLS + col
+
+    def key_to_position(self, key: int) -> tuple[int, int]:
+        """Return the ``(row, column)`` position for a key index."""
+        if not (0 <= key < self.deck.key_count()):
+            raise IndexError("Invalid key index")
+        return divmod(key, self.deck.KEY_COLS)
+
+    def display_board(self, board: list[list[str]]) -> None:
+        """Display a 2D array of single characters across the deck."""
+        for row in range(self.deck.KEY_ROWS):
+            for col in range(self.deck.KEY_COLS):
+                char = ""
+                if row < len(board) and col < len(board[row]):
+                    char = board[row][col]
+                self.set_key_text(self.position_to_key(row, col), char)
+
+    def wait_for_char_press(
+        self, char_map: dict[int, str], timeout: float | None = None
+    ) -> str | None:
+        """Wait for a key press and return the mapped character or ``None``."""
+        key = self.wait_for_key_press(timeout)
+        if key is None:
+            return None
+        return char_map.get(key)
+
     def run_loop(
         self,
         frame_callback: Callable[["MacroDeck", float], bool] | None = None,
