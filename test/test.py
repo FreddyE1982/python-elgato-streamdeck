@@ -212,6 +212,20 @@ def test_board_draw_scroll(deck):
     assert mdeck.get_board_char(1, 1) == "B"
 
 
+def test_draw_line(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    with deck:
+        deck.open()
+        mdeck.create_board()
+        mdeck.draw_line(0, 0, deck.KEY_ROWS - 1, deck.KEY_COLS - 1, "C")
+        deck.close()
+
+    assert mdeck.get_board_char(deck.KEY_ROWS - 1, deck.KEY_COLS - 1) == "C"
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
 
@@ -242,6 +256,7 @@ if __name__ == "__main__":
         "Game Helpers": test_game_helpers,
         "Board State": test_board_state,
         "Board Draw": test_board_draw_scroll,
+        "Draw Line": test_draw_line,
     }
 
     test_runners = tests

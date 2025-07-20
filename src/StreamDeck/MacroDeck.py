@@ -511,6 +511,32 @@ class MacroDeck:
                     if 0 <= c < self.deck.KEY_COLS:
                         self.set_board_char(r, c, char)
 
+    def draw_line(
+        self,
+        start_row: int,
+        start_col: int,
+        end_row: int,
+        end_col: int,
+        char: str,
+    ) -> None:
+        """Draw a straight line on the board using ``char``."""
+        if self.board is None:
+            self.create_board()
+
+        dr = end_row - start_row
+        dc = end_col - start_col
+        steps = max(abs(dr), abs(dc))
+        if steps == 0:
+            if 0 <= start_row < self.deck.KEY_ROWS and 0 <= start_col < self.deck.KEY_COLS:
+                self.set_board_char(start_row, start_col, char)
+            return
+
+        for i in range(steps + 1):
+            r = round(start_row + (dr * i) / steps)
+            c = round(start_col + (dc * i) / steps)
+            if 0 <= r < self.deck.KEY_ROWS and 0 <= c < self.deck.KEY_COLS:
+                self.set_board_char(r, c, char)
+
     def wait_for_char_press(
         self, char_map: dict[int, str], timeout: float | None = None
     ) -> str | None:
