@@ -351,6 +351,17 @@ class MacroDeck:
         """Return a list of keys that are currently pressed."""
         return [i for i, state in enumerate(self.deck.key_states()) if state]
 
+    def get_pressed_chars(self) -> list[str]:
+        """Return the characters on all currently pressed keys."""
+        if self.board is None:
+            raise ValueError("Board not initialised")
+
+        chars: list[str] = []
+        for key in self.get_pressed_keys():
+            row, col = self.key_to_position(key)
+            chars.append(self.board[row][col])
+        return chars
+
     def wait_for_key_press(self, timeout: float | None = None) -> int | None:
         """Wait for a key press and return its index or ``None`` on timeout."""
         start = time.time()
@@ -574,6 +585,18 @@ class MacroDeck:
         if key is None:
             return None
         return char_map.get(key)
+
+    def wait_for_board_press(self, timeout: float | None = None) -> str | None:
+        """Wait for a key press and return the character shown on the key."""
+        if self.board is None:
+            raise ValueError("Board not initialised")
+
+        char_map: dict[int, str] = {}
+        for r, row in enumerate(self.board):
+            for c, char in enumerate(row):
+                char_map[self.position_to_key(r, c)] = char
+
+        return self.wait_for_char_press(char_map, timeout)
 
     def run_loop(
         self,
