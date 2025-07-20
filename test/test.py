@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../src'))
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.ImageHelpers import PILHelper
 from PIL import ImageDraw
+from StreamDeck.MacroDeck import MacroDeck
 
 
 def test_pil_helpers(deck):
@@ -86,6 +87,29 @@ def test_key_pattern(deck):
         deck.close()
 
 
+def test_macrodeck_enable_disable(deck):
+    if not deck.is_visual():
+        return
+
+    macro_results = []
+
+    def sample_action():
+        macro_results.append(1)
+
+    mdeck = MacroDeck(deck)
+    mdeck.register_key_macro(0, sample_action)
+
+    # Disable and ensure action does not run
+    mdeck.disable()
+    mdeck._handle_key(deck, 0, True)
+    assert len(macro_results) == 0
+
+    # Enable and ensure action runs
+    mdeck.enable()
+    mdeck._handle_key(deck, 0, True)
+    assert macro_results == [1]
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
@@ -109,6 +133,7 @@ if __name__ == "__main__":
         "PIL Helpers": test_pil_helpers,
         "Basic APIs": test_basic_apis,
         "Key Pattern": test_key_pattern,
+        "MacroDeck Enable": test_macrodeck_enable_disable,
     }
 
     test_runners = tests
