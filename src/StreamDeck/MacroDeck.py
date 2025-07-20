@@ -348,6 +348,25 @@ class MacroDeck:
         else:
             self.update_key_configuration(key, uptext=text)
 
+    def set_key_image_file(self, key: int, path: str, pressed: bool = False) -> None:
+        """Display an image from ``path`` on a key."""
+        if pressed:
+            self.update_key_configuration(key, downimage=path)
+        else:
+            self.update_key_configuration(key, upimage=path)
+
+    def set_key_image_pil(self, key: int, image: Image.Image, pressed: bool = False) -> None:
+        """Display a PIL image on a key."""
+        img = PILHelper.to_native_key_format(self.deck, PILHelper.create_scaled_key_image(self.deck, image))
+        config = self.key_configs.get(key, {"up_image": None, "down_image": None})
+        if pressed:
+            config["down_image"] = img
+        else:
+            config["up_image"] = img
+        self.key_configs[key] = config
+        if self.deck.is_visual():
+            self.deck.set_key_image(key, img)
+
     def get_pressed_keys(self) -> list[int]:
         """Return a list of keys that are currently pressed."""
         return [i for i, state in enumerate(self.deck.key_states()) if state]
