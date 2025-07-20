@@ -345,6 +345,32 @@ class MacroDeck:
         else:
             self.update_key_configuration(key, uptext=text)
 
+    def get_pressed_keys(self) -> list[int]:
+        """Return a list of keys that are currently pressed."""
+        return [i for i, state in enumerate(self.deck.key_states()) if state]
+
+    def wait_for_key_press(self, timeout: float | None = None) -> int | None:
+        """Wait for a key press and return its index or ``None`` on timeout."""
+        start = time.time()
+        while True:
+            pressed = self.get_pressed_keys()
+            if pressed:
+                return pressed[0]
+            if timeout is not None and (time.time() - start) >= timeout:
+                return None
+            time.sleep(0.01)
+
+    def display_text(self, lines: list[str]) -> None:
+        """Display multiple lines of text across the deck."""
+        cols = self.deck.KEY_COLS
+        rows = self.deck.KEY_ROWS
+        for row in range(rows):
+            line = lines[row] if row < len(lines) else ""
+            for col in range(cols):
+                key = row * cols + col
+                char = line[col] if col < len(line) else ""
+                self.set_key_text(key, char)
+
     def run_loop(
         self,
         frame_callback: Callable[["MacroDeck", float], bool] | None = None,

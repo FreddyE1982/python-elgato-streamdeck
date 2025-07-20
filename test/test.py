@@ -143,6 +143,20 @@ def test_set_key_text(deck):
     assert 0 in mdeck.key_configs
 
 
+def test_display_text_and_wait(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    with deck:
+        deck.open()
+        mdeck.display_text(["AB"])
+        pressed = mdeck.wait_for_key_press(timeout=0)
+        deck.close()
+    assert 0 in mdeck.key_configs and 1 in mdeck.key_configs
+    assert pressed is None
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
 
@@ -169,6 +183,7 @@ if __name__ == "__main__":
         "MacroDeck Enable": test_macrodeck_enable_disable,
         "Run Loop": test_run_loop,
         "Set Key Text": test_set_key_text,
+        "Display Text": test_display_text_and_wait,
     }
 
     test_runners = tests

@@ -33,6 +33,8 @@ re-enabled with ``disable()`` and ``enable()``.
 Bulk helpers can configure or clear several keys at once, register
 multiple macros together and refresh stored images on the device.
 ``run_loop()`` provides a simple game loop for deck-only games and ``set_key_text()`` displays text directly on a key.
+``display_text()`` draws multi-line text across the deck while ``get_pressed_keys()``
+and ``wait_for_key_press()`` help reading user input for deck-only games.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:
