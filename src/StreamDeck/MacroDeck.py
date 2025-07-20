@@ -25,10 +25,23 @@ class MacroDeck:
         self.dial_macros: dict[tuple[int, DialEventType], Callable[[Any], Any] | str] = {}
         self.touch_macros: dict[TouchscreenEventType, Callable[[Any], Any] | str] = {}
         self.key_configs: dict[int, dict[str, Any]] = {}
+        self.enabled: bool = True
 
         self.deck.set_key_callback(self._handle_key)
         self.deck.set_dial_callback(self._handle_dial)
         self.deck.set_touchscreen_callback(self._handle_touch)
+
+    def enable(self) -> None:
+        """Enable macro execution."""
+        self.enabled = True
+
+    def disable(self) -> None:
+        """Disable macro execution."""
+        self.enabled = False
+
+    def is_enabled(self) -> bool:
+        """Return ``True`` if macro actions are enabled."""
+        return self.enabled
 
     def register_key_macro(self, key: int, action: Callable[[], Any] | str) -> None:
         """Register a macro action for a key press."""
@@ -326,6 +339,9 @@ class MacroDeck:
 
     # Internal handlers ---------------------------------------------------
     def _run_action(self, action: Callable | str, *args: Any) -> None:
+        if not self.enabled:
+            return
+
         if isinstance(action, str):
             subprocess.Popen(action, shell=True)
         else:
