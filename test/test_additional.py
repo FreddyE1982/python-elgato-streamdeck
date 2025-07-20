@@ -21,7 +21,8 @@ def test_device_manager_enumeration():
 def test_macrodeck_macro_management(deck):
     mdeck = MacroDeck(deck)
 
-    action = lambda: None
+    def action():
+        pass
     mdeck.register_key_macro(0, action)
     assert mdeck.get_key_macro(0) is action
     assert mdeck.macro_keys() == [0]
@@ -46,8 +47,11 @@ def test_macrodeck_macro_management(deck):
 def test_macrodeck_copy_move_swap_macros(deck):
     mdeck = MacroDeck(deck)
 
-    a = lambda: None
-    b = lambda: None
+    def a():
+        pass
+
+    def b():
+        pass
     mdeck.register_key_macro(0, a)
     mdeck.copy_key_macro(0, 1)
     assert mdeck.get_key_macro(1) is a
@@ -97,3 +101,41 @@ def test_device_monitor_callbacks():
 
     assert connected == [dev2]
     assert disconnected == [dev1]
+
+
+def test_macrodeck_reset(deck):
+    mdeck = MacroDeck(deck)
+
+    with deck:
+        deck.open()
+        mdeck.register_key_macro(0, lambda: None)
+        mdeck.register_dial_macro(0, DialEventType.TURN, lambda x: None)
+        mdeck.register_touch_macro(TouchscreenEventType.SHORT, lambda x: None)
+        mdeck.configure_key(0, uptext="A")
+        mdeck.create_board()
+        mdeck.create_image_board()
+        deck.close()
+
+    mdeck.disable()
+
+    assert mdeck.key_macros
+    assert mdeck.dial_macros
+    assert mdeck.touch_macros
+    assert mdeck.key_configs
+    assert mdeck.board is not None
+    assert mdeck.image_board is not None
+    assert not mdeck.is_enabled()  # disabled above
+
+    deck.open()
+    with mock.patch.object(deck, "reset") as reset_mock:
+        mdeck.reset()
+        reset_mock.assert_called_once()
+    deck.close()
+
+    assert mdeck.key_macros == {}
+    assert mdeck.dial_macros == {}
+    assert mdeck.touch_macros == {}
+    assert mdeck.key_configs == {}
+    assert mdeck.board is None
+    assert mdeck.image_board is None
+    assert mdeck.is_enabled()

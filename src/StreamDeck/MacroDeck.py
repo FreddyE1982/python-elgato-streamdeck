@@ -57,6 +57,8 @@ class MacroDeck:
         """Reset all macros and board state, clearing the deck."""
 
         self.clear_all_key_configurations()
+        self.dial_macros.clear()
+        self.touch_macros.clear()
         self.board = None
         self.image_board = None
         self.enabled = True
