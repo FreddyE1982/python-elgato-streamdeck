@@ -34,6 +34,10 @@ Version 0.9.16:
         - Added ``display_text()`` helper for multi-line text output.
         - Added ``get_pressed_keys()`` and ``wait_for_key_press()`` input helpers.
 
+Version 0.9.17:
+        - Added ``create_board_from_strings()``, ``get_board_as_strings()`` and
+          ``draw_multiline_text()`` helpers for deck-only games.
+
 Version 0.9.7:
         - Added type hints to public APIs.
         - Fixed leading whitespace in StreamDeck Plus serial number strings.

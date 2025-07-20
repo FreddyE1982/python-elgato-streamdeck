@@ -400,6 +400,17 @@ class MacroDeck:
         self.board = [[fill for _ in range(self.deck.KEY_COLS)] for _ in range(self.deck.KEY_ROWS)]
         self.display_board(self.board)
 
+    def create_board_from_strings(self, lines: list[str], fill: str = " ") -> None:
+        """Create an internal board from ``lines`` and display it."""
+        rows = self.deck.KEY_ROWS
+        cols = self.deck.KEY_COLS
+        self.board = [[fill for _ in range(cols)] for _ in range(rows)]
+        for r in range(min(rows, len(lines))):
+            line = lines[r]
+            for c in range(min(cols, len(line))):
+                self.board[r][c] = line[c]
+        self.display_board(self.board)
+
     def clear_board(self, fill: str = " ") -> None:
         """Clear the internal board to ``fill`` and redraw it."""
         if self.board is None:
@@ -433,6 +444,12 @@ class MacroDeck:
             raise ValueError("Board not initialised")
         return [list(r) for r in self.board]
 
+    def get_board_as_strings(self) -> list[str]:
+        """Return the internal board as a list of strings."""
+        if self.board is None:
+            raise ValueError("Board not initialised")
+        return ["".join(row) for row in self.board]
+
     def refresh_board(self) -> None:
         """Redraw the internal board on the deck."""
         if self.board is not None:
@@ -448,6 +465,18 @@ class MacroDeck:
             if 0 <= r < self.deck.KEY_ROWS and 0 <= c < self.deck.KEY_COLS:
                 self.board[r][c] = char
                 self.set_key_text(self.position_to_key(r, c), char)
+
+    def draw_multiline_text(self, top: int, left: int, lines: list[str]) -> None:
+        """Draw multiple lines of text onto the board starting at ``(top, left)``."""
+        if self.board is None:
+            self.create_board()
+        for r, line in enumerate(lines):
+            for c, char in enumerate(line):
+                rr = top + r
+                cc = left + c
+                if 0 <= rr < self.deck.KEY_ROWS and 0 <= cc < self.deck.KEY_COLS:
+                    self.board[rr][cc] = char
+                    self.set_key_text(self.position_to_key(rr, cc), char)
 
     def overlay_board(
         self, board: list[list[str]], top: int = 0, left: int = 0
