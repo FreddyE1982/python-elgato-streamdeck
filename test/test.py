@@ -110,8 +110,41 @@ def test_macrodeck_enable_disable(deck):
     assert macro_results == [1]
 
 
+def test_run_loop(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    frame_counter = []
+
+    def frame(md, dt):
+        frame_counter.append(dt)
+        if len(frame_counter) >= 2:
+            md.stop_loop()
+            return False
+        return True
+
+    with deck:
+        deck.open()
+        mdeck.run_loop(frame, fps=10)
+        deck.close()
+    assert len(frame_counter) >= 2
+
+
+def test_set_key_text(deck):
+    if not deck.is_visual():
+        return
+
+    mdeck = MacroDeck(deck)
+    with deck:
+        deck.open()
+        mdeck.set_key_text(0, "X")
+        deck.close()
+    assert 0 in mdeck.key_configs
+
+
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.ERROR)
 
     parser = argparse.ArgumentParser(description="StreamDeck Library test.")
     parser.add_argument("--model", help="Stream Deck model name to test")
@@ -134,6 +167,8 @@ if __name__ == "__main__":
         "Basic APIs": test_basic_apis,
         "Key Pattern": test_key_pattern,
         "MacroDeck Enable": test_macrodeck_enable_disable,
+        "Run Loop": test_run_loop,
+        "Set Key Text": test_set_key_text,
     }
 
     test_runners = tests

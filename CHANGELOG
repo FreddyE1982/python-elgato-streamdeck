@@ -26,6 +26,10 @@ Version 0.9.14:
         - Added ``enable()`` and ``disable()`` methods to ``MacroDeck`` to
           control macro execution.
 
+Version 0.9.15:
+        - Added ``run_loop()`` and ``stop_loop()`` helpers for simple game loops.
+        - Added ``set_key_text()`` helper to quickly display text on a key.
+
 Version 0.9.7:
         - Added type hints to public APIs.
         - Fixed leading whitespace in StreamDeck Plus serial number strings.
