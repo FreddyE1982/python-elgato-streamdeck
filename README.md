@@ -38,6 +38,8 @@ and ``wait_for_key_press()`` help reading user input for deck-only games.
 ``position_to_key()`` and ``key_to_position()`` convert between key indexes and grid
 positions. ``display_board()`` renders a 2D array of characters, and
 ``wait_for_char_press()`` returns the character associated with a pressed key.
+``get_pressed_chars()`` lists the characters on pressed keys and
+``wait_for_board_press()`` returns the character displayed on the next key press.
 ``create_board()`` and related helpers manage a persistent character grid for
 deck-only games, allowing individual cells to be updated and redrawn easily.
 ``scroll_board()``, ``draw_line()``, ``draw_rect()`` and ``fill_rect()`` provide additional
