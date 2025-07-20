@@ -1,6 +1,10 @@
 Version 0.9.8:
         - Added macro unregister helpers and key configuration clearing.
 
+Version 0.9.19:
+        - Added ``reset()`` helper to ``MacroDeck`` for clearing all
+          configurations and board state.
+
 Version 0.9.9:
         - Added key query and update helpers for ``MacroDeck`` to simplify key
           management and modification.
