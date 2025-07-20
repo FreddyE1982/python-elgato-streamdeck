@@ -167,6 +167,8 @@ def test_game_helpers(deck):
     with deck:
         deck.open()
         mdeck.display_board(board)
+        mdeck.draw_text(0, 0, "HI")
+        mdeck.overlay_board([["Z"]], top=1, left=1)
         pos = mdeck.key_to_position(0)
         idx = mdeck.position_to_key(*pos)
         char = mdeck.wait_for_char_press({0: "A"}, timeout=0)

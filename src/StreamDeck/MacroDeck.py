@@ -438,6 +438,32 @@ class MacroDeck:
         if self.board is not None:
             self.display_board(self.board)
 
+    def draw_text(self, row: int, col: int, text: str) -> None:
+        """Draw ``text`` onto the internal board starting at ``(row, col)``."""
+        if self.board is None:
+            self.create_board()
+        for offset, char in enumerate(text):
+            r = row
+            c = col + offset
+            if 0 <= r < self.deck.KEY_ROWS and 0 <= c < self.deck.KEY_COLS:
+                self.board[r][c] = char
+                self.set_key_text(self.position_to_key(r, c), char)
+
+    def overlay_board(
+        self, board: list[list[str]], top: int = 0, left: int = 0
+    ) -> None:
+        """Overlay ``board`` onto the internal board at ``(top, left)``."""
+        if self.board is None:
+            self.create_board()
+
+        for r, row_data in enumerate(board):
+            for c, char in enumerate(row_data):
+                rr = top + r
+                cc = left + c
+                if 0 <= rr < self.deck.KEY_ROWS and 0 <= cc < self.deck.KEY_COLS:
+                    self.board[rr][cc] = char
+                    self.set_key_text(self.position_to_key(rr, cc), char)
+
     def wait_for_char_press(
         self, char_map: dict[int, str], timeout: float | None = None
     ) -> str | None:
