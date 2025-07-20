@@ -4,7 +4,13 @@
 #   dean [at] fourwalledcubicle [dot] com
 #         www.fourwalledcubicle.com
 #
-"""Simple macro framework for StreamDeck devices."""
+"""Simple macro framework for StreamDeck devices.
+
+This helper class allows applications to associate callbacks with key, dial
+and touch events, manage image and character boards and perform common deck
+operations.  A new :func:`reset` helper is included to clear all stored
+configuration and return the deck to a blank state.
+"""
 
 import subprocess
 import time
@@ -46,6 +52,15 @@ class MacroDeck:
     def is_enabled(self) -> bool:
         """Return ``True`` if macro actions are enabled."""
         return self.enabled
+
+    def reset(self) -> None:
+        """Reset all macros and board state, clearing the deck."""
+
+        self.clear_all_key_configurations()
+        self.board = None
+        self.image_board = None
+        self.enabled = True
+        self.deck.reset()
 
     def register_key_macro(self, key: int, action: Callable[[], Any] | str) -> None:
         """Register a macro action for a key press."""
