@@ -28,6 +28,7 @@ class MacroDeck:
         self.key_configs: dict[int, dict[str, Any]] = {}
         self.enabled: bool = True
         self.board: list[list[str]] | None = None
+        self.image_board: list[list[bytes | None]] | None = None
         self._loop_running: bool = False
 
         self.deck.set_key_callback(self._handle_key)
@@ -576,6 +577,101 @@ class MacroDeck:
             c = round(start_col + (dc * i) / steps)
             if 0 <= r < self.deck.KEY_ROWS and 0 <= c < self.deck.KEY_COLS:
                 self.set_board_char(r, c, char)
+
+    # Image board helpers -------------------------------------------------
+    def display_image_board(self, board: list[list[bytes | None]]) -> None:
+        """Display a 2D array of key images across the deck."""
+        if not self.deck.is_visual():
+            return
+        for row in range(self.deck.KEY_ROWS):
+            for col in range(self.deck.KEY_COLS):
+                image = None
+                if row < len(board) and col < len(board[row]):
+                    image = board[row][col]
+                self.deck.set_key_image(self.position_to_key(row, col), image)
+
+    def create_image_board(self, fill: bytes | None = None) -> None:
+        """Create an internal image board and display it."""
+        self.image_board = [
+            [fill for _ in range(self.deck.KEY_COLS)]
+            for _ in range(self.deck.KEY_ROWS)
+        ]
+        self.display_image_board(self.image_board)
+
+    def clear_image_board(self, fill: bytes | None = None) -> None:
+        """Clear the internal image board to ``fill`` and redraw it."""
+        if self.image_board is None:
+            self.create_image_board(fill)
+            return
+        for row in range(self.deck.KEY_ROWS):
+            for col in range(self.deck.KEY_COLS):
+                self.image_board[row][col] = fill
+        self.display_image_board(self.image_board)
+
+    def set_board_image(self, row: int, col: int, image: bytes | None) -> None:
+        """Set an image on the internal board at ``(row, col)``."""
+        if self.image_board is None:
+            self.create_image_board()
+        if not (0 <= row < self.deck.KEY_ROWS) or not (0 <= col < self.deck.KEY_COLS):
+            raise IndexError("Invalid row or column")
+        self.image_board[row][col] = image
+        if self.deck.is_visual():
+            self.deck.set_key_image(self.position_to_key(row, col), image)
+
+    def get_board_image(self, row: int, col: int) -> bytes | None:
+        """Return the image stored at ``(row, col)``."""
+        if self.image_board is None:
+            raise ValueError("Image board not initialised")
+        if not (0 <= row < self.deck.KEY_ROWS) or not (0 <= col < self.deck.KEY_COLS):
+            raise IndexError("Invalid row or column")
+        return self.image_board[row][col]
+
+    def get_image_board(self) -> list[list[bytes | None]]:
+        """Return a copy of the internal image board."""
+        if self.image_board is None:
+            raise ValueError("Image board not initialised")
+        return [list(r) for r in self.image_board]
+
+    def refresh_image_board(self) -> None:
+        """Redraw the internal image board on the deck."""
+        if self.image_board is not None:
+            self.display_image_board(self.image_board)
+
+    def overlay_image_board(
+        self, board: list[list[bytes | None]], top: int = 0, left: int = 0
+    ) -> None:
+        """Overlay ``board`` onto the internal image board at ``(top, left)``."""
+        if self.image_board is None:
+            self.create_image_board()
+
+        for r, row_data in enumerate(board):
+            for c, image in enumerate(row_data):
+                rr = top + r
+                cc = left + c
+                if 0 <= rr < self.deck.KEY_ROWS and 0 <= cc < self.deck.KEY_COLS:
+                    self.image_board[rr][cc] = image
+                    if self.deck.is_visual():
+                        self.deck.set_key_image(self.position_to_key(rr, cc), image)
+
+    def scroll_image_board(self, dx: int = 0, dy: int = 0, fill: bytes | None = None) -> None:
+        """Scroll the image board by ``(dx, dy)`` and fill empty cells with ``fill``."""
+        if self.image_board is None:
+            self.create_image_board(fill)
+            return
+
+        new_board = [
+            [fill for _ in range(self.deck.KEY_COLS)] for _ in range(self.deck.KEY_ROWS)
+        ]
+
+        for r in range(self.deck.KEY_ROWS):
+            for c in range(self.deck.KEY_COLS):
+                nr = r + dy
+                nc = c + dx
+                if 0 <= nr < self.deck.KEY_ROWS and 0 <= nc < self.deck.KEY_COLS:
+                    new_board[nr][nc] = self.image_board[r][c]
+
+        self.image_board = new_board
+        self.refresh_image_board()
 
     def wait_for_char_press(
         self, char_map: dict[int, str], timeout: float | None = None

@@ -46,6 +46,8 @@ deck-only games, allowing individual cells to be updated and redrawn easily.
 helpers for moving and drawing on the board. ``create_board_from_strings()`` quickly
 populates a board from lines of text, ``get_board_as_strings()`` returns the board
 as text and ``draw_multiline_text()`` overlays several lines at once.
+``create_image_board()`` and related helpers manage a board of key images for
+deck-only games, allowing graphics to be scrolled or overlaid easily.
 
 Currently the following StreamDeck products are supported in multiple hardware
 variants:
