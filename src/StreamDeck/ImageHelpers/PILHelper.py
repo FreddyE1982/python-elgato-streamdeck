@@ -253,3 +253,64 @@ def to_native_screen_format(deck: StreamDeck, image: Image.Image) -> bytes:
     :return: Image converted to the given StreamDeck's native screen format
     """
     return _to_native_format(image, deck.screen_image_format())
+
+
+def create_deck_sized_image(
+    deck: StreamDeck, image: Image.Image, key_spacing: tuple[int, int] = (0, 0)
+) -> Image.Image:
+    """Return ``image`` resized to fill the entire deck surface.
+
+    Parameters
+    ----------
+    deck
+        Target StreamDeck device.
+    image
+        Source PIL image to scale.
+    key_spacing
+        Horizontal and vertical pixel spacing between keys. This is used when
+        calculating the final deck size so that large images can take the bezel
+        gaps into account.
+    """
+
+    from PIL import ImageOps
+
+    key_rows, key_cols = deck.key_layout()
+    key_width, key_height = deck.key_image_format()["size"]
+    spacing_x, spacing_y = key_spacing
+
+    deck_width = (key_width * key_cols) + spacing_x * (key_cols - 1)
+    deck_height = (key_height * key_rows) + spacing_y * (key_rows - 1)
+
+    return ImageOps.fit(image.convert("RGBA"), (deck_width, deck_height), Image.LANCZOS)
+
+
+def split_deck_image(
+    deck: StreamDeck, deck_image: Image.Image, key_spacing: tuple[int, int] = (0, 0)
+) -> dict[int, bytes]:
+    """Split ``deck_image`` into native key images.
+
+    ``deck_image`` should be sized with :func:`create_deck_sized_image` so that
+    it covers the entire deck surface. The return value is a dictionary mapping
+    key indices to images ready to send to :func:`StreamDeck.set_key_image`.
+    """
+
+    key_rows, key_cols = deck.key_layout()
+    key_width, key_height = deck.key_image_format()["size"]
+    spacing_x, spacing_y = key_spacing
+
+    key_images: dict[int, bytes] = {}
+    for idx in range(deck.key_count()):
+        row = idx // key_cols
+        col = idx % key_cols
+
+        start_x = col * (key_width + spacing_x)
+        start_y = row * (key_height + spacing_y)
+        region = (start_x, start_y, start_x + key_width, start_y + key_height)
+
+        tile = deck_image.crop(region)
+
+        key_img = create_key_image(deck)
+        key_img.paste(tile)
+        key_images[idx] = to_native_key_format(deck, key_img)
+
+    return key_images
