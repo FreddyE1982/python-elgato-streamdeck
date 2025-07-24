@@ -57,8 +57,7 @@ class MacroDeck:
         """Reset all macros and board state, clearing the deck."""
 
         self.clear_all_key_configurations()
-        self.dial_macros.clear()
-        self.touch_macros.clear()
+        self.clear_all_macros()
         self.board = None
         self.image_board = None
         self.enabled = True
@@ -250,6 +249,42 @@ class MacroDeck:
         """Remove macros for the specified keys."""
         for key in keys:
             self.unregister_key_macro(key)
+
+    def register_dial_macros(
+        self,
+        macros: dict[tuple[int, DialEventType], Callable[[Any], Any] | str],
+    ) -> None:
+        """Register multiple dial macros in one call."""
+        for (dial, event), action in macros.items():
+            self.register_dial_macro(dial, event, action)
+
+    def unregister_dial_macros(
+        self, dial_events: Iterable[tuple[int, DialEventType]]
+    ) -> None:
+        """Remove macros for the specified dial events."""
+        for dial, event in dial_events:
+            self.unregister_dial_macro(dial, event)
+
+    def register_touch_macros(
+        self,
+        macros: dict[TouchscreenEventType, Callable[[Any], Any] | str],
+    ) -> None:
+        """Register multiple touch macros in one call."""
+        for event, action in macros.items():
+            self.register_touch_macro(event, action)
+
+    def unregister_touch_macros(
+        self, events: Iterable[TouchscreenEventType]
+    ) -> None:
+        """Remove macros for the specified touch events."""
+        for event in events:
+            self.unregister_touch_macro(event)
+
+    def clear_all_macros(self) -> None:
+        """Remove all registered key, dial and touch macros."""
+        self.key_macros.clear()
+        self.dial_macros.clear()
+        self.touch_macros.clear()
 
     def configure_keys(self, configs: dict[int, dict[str, Any]]) -> None:
         """Configure several keys in one call."""

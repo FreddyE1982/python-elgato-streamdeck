@@ -9,6 +9,10 @@ Version 0.9.20:
         - ``MacroDeck.reset()`` now also clears registered dial and touch
           macros.
 
+Version 0.9.21:
+        - Added bulk dial and touch macro registration and removal helpers.
+        - Added ``clear_all_macros()`` helper to remove all registered macros.
+
 Version 0.9.9:
         - Added key query and update helpers for ``MacroDeck`` to simplify key
           management and modification.

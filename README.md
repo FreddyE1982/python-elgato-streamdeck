@@ -28,10 +28,11 @@ registered macros for keys, dials and touch events.
 Further helpers allow duplicating, moving or swapping key configurations and
 checking if a key already has a configuration. Additional helpers let you copy,
 move or swap just the registered macros and clear all stored key
-configurations in one call. Macro execution can be temporarily disabled and
-re-enabled with ``disable()`` and ``enable()``.
-Bulk helpers can configure or clear several keys at once, register
-multiple macros together and refresh stored images on the device.
+configurations in one call. ``clear_all_macros()`` removes every registered
+macro and macro execution can be temporarily disabled and re-enabled with
+``disable()`` and ``enable()``.
+Bulk helpers can configure or clear several keys at once, register multiple
+key, dial or touch macros together and refresh stored images on the device.
 ``run_loop()`` provides a simple game loop for deck-only games and ``set_key_text()`` displays text directly on a key.
 ``set_key_image_file()`` and ``set_key_image_pil()`` simplify showing images on individual keys. ``set_key_image_bytes()`` accepts pre-formatted images and ``get_key_image()``, ``has_key_image()``, ``clear_key_image()``, ``copy_key_image()``, ``move_key_image()`` and ``swap_key_images()`` help manage stored key images.
 ``display_text()`` draws multi-line text across the deck while ``get_pressed_keys()``
