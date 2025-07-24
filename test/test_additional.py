@@ -146,3 +146,45 @@ def test_macrodeck_reset(deck):
     assert mdeck.board is None
     assert mdeck.image_board is None
     assert mdeck.is_enabled()
+
+
+def test_macrodeck_bulk_macro_helpers(deck):
+    mdeck = MacroDeck(deck)
+
+    def a(value=None):
+        pass
+
+    def b(value=None):
+        pass
+
+    dial_macros = {
+        (0, DialEventType.PUSH): a,
+        (1, DialEventType.TURN): b,
+    }
+    mdeck.register_dial_macros(dial_macros)
+    assert mdeck.get_dial_macro(0, DialEventType.PUSH) is a
+    assert mdeck.get_dial_macro(1, DialEventType.TURN) is b
+
+    mdeck.unregister_dial_macros([(0, DialEventType.PUSH)])
+    assert mdeck.get_dial_macro(0, DialEventType.PUSH) is None
+    assert mdeck.get_dial_macro(1, DialEventType.TURN) is b
+
+    touch_macros = {
+        TouchscreenEventType.SHORT: a,
+        TouchscreenEventType.LONG: b,
+    }
+    mdeck.register_touch_macros(touch_macros)
+    assert mdeck.get_touch_macro(TouchscreenEventType.SHORT) is a
+    assert mdeck.get_touch_macro(TouchscreenEventType.LONG) is b
+
+    mdeck.unregister_touch_macros([TouchscreenEventType.SHORT])
+    assert mdeck.get_touch_macro(TouchscreenEventType.SHORT) is None
+    assert mdeck.get_touch_macro(TouchscreenEventType.LONG) is b
+
+    mdeck.register_key_macro(0, lambda: None)
+    mdeck.clear_all_macros()
+
+    assert mdeck.key_macros == {}
+    assert mdeck.dial_macros == {}
+    assert mdeck.touch_macros == {}
+
