@@ -7,8 +7,10 @@
 #         www.fourwalledcubicle.com
 #
 
-# Example script showing basic library usage - updating key images with new
-# tiles generated at runtime, and responding to button state change events.
+"""Basic usage demonstration.
+
+Generates key images at runtime and reacts to button presses.
+"""
 
 import os
 import threading

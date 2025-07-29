@@ -5,7 +5,7 @@
 #
 #
 
-# Example script showing some Stream Deck + specific functions
+"""Showcase Stream Deck Plus specific functions."""
 
 import os
 import threading

@@ -15,7 +15,7 @@ setuptools.setup(
    url='https://github.com/abcminiuser/python-elgato-streamdeck',
    package_dir={'': 'src'},
    packages=setuptools.find_packages(where='src'),
-   install_requires=[],
+   install_requires=['Pillow>=9.0.0'],
    license="MIT",
    long_description=long_description,
    long_description_content_type="text/markdown",

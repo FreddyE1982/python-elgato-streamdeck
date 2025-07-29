@@ -7,9 +7,7 @@
 #         www.fourwalledcubicle.com
 #
 
-# Example script showing how to tile a larger image across multiple buttons, by
-# first generating an image suitable for the entire deck, then cropping out and
-# applying key-sized tiles to individual keys of a StreamDeck.
+"""Tile a single image across all keys of a Stream Deck."""
 
 import os
 import threading

@@ -6,6 +6,7 @@ This is an open source Python 3 library to control an
 [Elgato Stream Deck](https://www.elgato.com/en/gaming/stream-deck) directly,
 without the official software. This can allow you to create your own custom
 front-ends, such as a custom control front-end for home automation software.
+The library requires **Python 3.8 or later**.
 
 _________________
 
@@ -53,22 +54,45 @@ deck-only games, allowing graphics to be scrolled or overlaid easily.
 ``display_deck_image()`` scales a single image across the entire deck and updates the
 internal image board for further manipulation.
 
-Currently the following StreamDeck products are supported in multiple hardware
-variants:
+The library supports several Stream Deck models. Their capabilities are
+summarised below:
 
-* StreamDeck Mini
-* StreamDeck Neo
-* StreamDeck Original
-* StreamDeck Pedal
-* StreamDeck Plus
-* StreamDeck XL
+| Device             | Keys | Dials | Touchscreen | Visual |
+|--------------------|-----:|------:|-------------|:------:|
+| StreamDeck Mini    | 6    | 0     | No          | Yes    |
+| StreamDeck Neo     | 8 + 2 touch keys | 0 | Small screen | Yes |
+| StreamDeck Original| 15   | 0     | No          | Yes    |
+| StreamDeck Pedal   | 3    | 0     | No          | No     |
+| StreamDeck Plus    | 8    | 4     | Yes         | Yes    |
+| StreamDeck XL      | 32   | 0     | No          | Yes    |
+
+## Example Scripts
+
+The `src` directory contains a range of small programs demonstrating common
+usage patterns:
+
+* `example_deckinfo.py` – enumerate attached devices and print their details.
+* `example_basic.py` – generate images at runtime and react to key presses.
+* `example_tileimage.py` – tile a larger image across all keys.
+* `example_animated.py` – display animated graphics using pre-rendered frames.
+* `example_pedal.py` – read events from the Stream Deck Pedal.
+* `example_plus.py` – demonstrate dial and touchscreen features of the Plus.
+* `example_neo.py` – show usage of the Neo\'s small screen and extra touch keys.
 
 ## Package Installation:
 
-Install the library via pip:
+Install the library via pip. Creating a virtual environment is recommended:
 
-```
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install streamdeck
+```
+
+To enable image related helpers install the optional Pillow dependency:
+
+```bash
+pip install pillow
 ```
 
 Alternatively, manually clone the project repository:

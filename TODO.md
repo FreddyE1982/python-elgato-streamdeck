@@ -2,17 +2,17 @@
 
 The following steps are ordered from simple documentation updates to complex architectural changes. Extensive steps are broken into substeps.
 
-1. Document Python version requirement in `README.md`.
-2. Add installation instructions for optional `Pillow` dependency in `README.md`.
-3. Document the purpose of each example script in `README.md`.
-4. Update `CHANGELOG` to reflect latest version `0.9.21`.
-5. Synchronize `VERSION` file with `CHANGELOG`.
-6. Include `Pillow>=9.0.0` in `setup.py` `install_requires`.
-7. Add `.editorconfig` for consistent code style.
-8. Document virtual environment usage in `README.md`.
-9. Clarify device support matrix in documentation.
-10. Add missing docstrings to all example scripts.
-11. Enable strict linting rules by adjusting `.flake8` ignores.
+1. Document Python version requirement in `README.md`. **complete**
+2. Add installation instructions for optional `Pillow` dependency in `README.md`. **complete**
+3. Document the purpose of each example script in `README.md`. **complete**
+4. Update `CHANGELOG` to reflect latest version `0.9.21`. **complete**
+5. Synchronize `VERSION` file with `CHANGELOG`. **complete**
+6. Include `Pillow>=9.0.0` in `setup.py` `install_requires`. **complete**
+7. Add `.editorconfig` for consistent code style. **complete**
+8. Document virtual environment usage in `README.md`. **complete**
+9. Clarify device support matrix in documentation. **complete**
+10. Add missing docstrings to all example scripts. **complete**
+11. Enable strict linting rules by adjusting `.flake8` ignores. **complete**
 12. Add type hints to all functions in `src/example_basic.py`.
 13. Apply type hints to remaining example scripts.
 14. Add `mypy` configuration and initial check in CI.

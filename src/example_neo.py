@@ -7,8 +7,7 @@
 #         www.fourwalledcubicle.com
 #
 
-# Example script showing basic library usage - updating key images with new
-# tiles generated at runtime, and responding to button state change events.
+"""Demonstrate Stream Deck Neo features and basic interactions."""
 
 import os
 import threading

@@ -7,10 +7,11 @@
 #         www.fourwalledcubicle.com
 #
 
-# Example script showing one way to display animated images using the
-# library, by pre-rendering all the animation frames into the StreamDeck
-# device's native image format, and displaying them with a periodic
-# timer.
+"""Display animated images on a Stream Deck device.
+
+Frames are pre-rendered into the device's native image format and
+displayed using a periodic timer.
+"""
 
 import itertools
 import os
