@@ -23,25 +23,25 @@ The following steps are ordered from simple documentation updates to complex arc
 19. Create a script to list connected Stream Decks. **complete**
 20. Add unit tests for `DeviceManager.enumerate` using dummy transport. **complete**
 21. Document testing instructions in `README.md`. **complete**
-22. Provide example images in a dedicated `assets` section of docs.
+22. Provide example images in a dedicated `assets` section of docs. **complete**
 23. Document environment variables used by the library. **complete**
 24. Replace direct path manipulation with `pathlib` in `example_basic.py`. **complete**
 25. Add docstrings to all methods in `DeviceMonitor`. **complete**
 26. Add type hints to `DeviceMonitor` methods. **complete**
 27. Expand test coverage for `DeviceMonitor` start/stop behavior. **complete**
 28. Add docstrings to `MacroDeck` private helper methods. **complete**
-29. Enforce `black` formatting via CI.
-30. Move CLI logic in tests into separate example script.
-31. Replace `print` statements with `logging` in examples.
+29. Enforce `black` formatting via CI. **complete**
+30. Move CLI logic in tests into separate example script. **complete**
+31. Replace `print` statements with `logging` in examples. **complete**
 32. Create unit tests for `MacroDeck.get_board_char` error conditions. **complete**
-33. Add docstrings to `Transport` abstract methods.
-34. Document return types in `Transport` subclasses.
+33. Add docstrings to `Transport` abstract methods. **complete**
+34. Document return types in `Transport` subclasses. **complete**
 35. Add test to confirm `Dummy` transport logs messages. **complete**
-36. Incorporate continuous integration using GitHub Actions.
-37. Add badges for build status and coverage to `README.md`.
-38. Implement `ruff` for linting and integrate with CI.
-39. Document how to build and view Sphinx docs locally.
-40. Add code examples for touchscreen APIs in docs.
+36. Incorporate continuous integration using GitHub Actions. **complete**
+37. Add badges for build status and coverage to `README.md`. **complete**
+38. Implement `ruff` for linting and integrate with CI. **complete**
+39. Document how to build and view Sphinx docs locally. **complete**
+40. Add code examples for touchscreen APIs in docs. **complete**
 41. Split large constants in device classes into separate module.
 42. Replace magic numbers with named constants in device implementations.
 43. Refactor repeated JPEG header bytes into a helper function.

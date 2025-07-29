@@ -9,6 +9,7 @@
 
 """Demonstrate handling key events from a Stream Deck Pedal."""
 
+import logging
 import threading
 
 from StreamDeck.Devices.StreamDeck import StreamDeck
@@ -18,27 +19,28 @@ from StreamDeck.Transport.Transport import TransportError
 
 
 def key_change_callback(deck: StreamDeck, key: int, state: bool) -> None:
-    print(
-        "Deck {} Key {} = {}".format(
-            deck.id(),
-            key,
-            "down" if state else "up",
-        ),
-        flush=True,
+    logging.info(
+        "Deck %s Key %s = %s",
+        deck.id(),
+        key,
+        "down" if state else "up",
     )
 
 
 if __name__ == "__main__":
     streamdecks = DeviceManager().enumerate()
 
-    print("Found {} Stream Deck(s).\n".format(len(streamdecks)))
+    logging.info("Found %s Stream Deck(s).", len(streamdecks))
 
     for index, deck in enumerate(streamdecks):
         deck.open()
 
-        print("Opened '{}' device (serial number: '{}', fw: '{}')".format(
-            deck.deck_type(), deck.get_serial_number(), deck.get_firmware_version()
-        ))
+        logging.info(
+            "Opened '%s' device (serial number: '%s', fw: '%s')",
+            deck.deck_type(),
+            deck.get_serial_number(),
+            deck.get_firmware_version(),
+        )
 
         # Register callback function for when a key state changes.
         deck.set_key_callback(key_change_callback)

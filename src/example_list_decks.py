@@ -8,6 +8,8 @@
 #
 """List all connected Stream Deck devices."""
 
+import logging
+
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.Devices.StreamDeck import StreamDeck
 
@@ -16,12 +18,15 @@ def list_decks() -> None:
     """Enumerate devices and print basic information."""
     manager = DeviceManager()
     decks: list[StreamDeck] = manager.enumerate()
-    print(f"Found {len(decks)} Stream Deck(s).\n")
+    logging.info("Found %s Stream Deck(s).", len(decks))
     for deck in decks:
         deck.open()
-        print(
-            f"{deck.id()}: {deck.deck_type()} "
-            f"(serial: {deck.get_serial_number()}, fw: {deck.get_firmware_version()})"
+        logging.info(
+            "%s: %s (serial: %s, fw: %s)",
+            deck.id(),
+            deck.deck_type(),
+            deck.get_serial_number(),
+            deck.get_firmware_version(),
         )
         deck.close()
 
