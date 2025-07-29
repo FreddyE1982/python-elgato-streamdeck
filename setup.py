@@ -21,4 +21,9 @@ setuptools.setup(
    long_description_content_type="text/markdown",
    include_package_data=True,
    python_requires='>=3.9',
+   classifiers=[
+       'Programming Language :: Python :: 3.9',
+       'Programming Language :: Python :: 3.10',
+       'Programming Language :: Python :: 3.11',
+   ],
 )

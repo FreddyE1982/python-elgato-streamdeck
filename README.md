@@ -78,6 +78,7 @@ usage patterns:
 * `example_pedal.py` – read events from the Stream Deck Pedal.
 * `example_plus.py` – demonstrate dial and touchscreen features of the Plus.
 * `example_neo.py` – show usage of the Neo\'s small screen and extra touch keys.
+* `example_list_decks.py` – simple script printing connected deck information.
 
 ## Package Installation:
 
@@ -105,6 +106,15 @@ For detailed installation instructions, refer to the prebuilt
 [online documentation](https://python-elgato-streamdeck.readthedocs.io), or
 build the documentation yourself locally by running `make html` from the `docs`
 directory.
+
+## Available Transports
+
+Two transport back-ends are bundled with the library:
+
+* `libusb` – the default USB HID implementation used for real hardware.
+* `dummy` – a fake backend useful for running the unit tests without hardware.
+
+Select a transport with ``DeviceManager(transport="name")`` when needed.
 
 
 ## Credits:

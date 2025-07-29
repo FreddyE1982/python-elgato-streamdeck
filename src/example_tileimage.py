@@ -16,6 +16,7 @@ from PIL import Image, ImageOps
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.ImageHelpers import PILHelper
 from StreamDeck.Transport.Transport import TransportError
+from StreamDeck.Devices.StreamDeck import StreamDeck
 
 # Folder location of image assets used by this example.
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
@@ -23,7 +24,9 @@ ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
 
 # Generates an image that is correctly sized to fit across all keys of a given
 # StreamDeck.
-def create_full_deck_sized_image(deck, key_spacing, image_filename):
+def create_full_deck_sized_image(
+    deck: StreamDeck, key_spacing: tuple[int, int], image_filename: str
+) -> Image.Image:
     key_rows, key_cols = deck.key_layout()
     key_width, key_height = deck.key_image_format()['size']
     spacing_x, spacing_y = key_spacing
@@ -53,7 +56,9 @@ def create_full_deck_sized_image(deck, key_spacing, image_filename):
 
 # Crops out a key-sized image from a larger deck-sized image, at the location
 # occupied by the given key index.
-def crop_key_image_from_deck_sized_image(deck, image, key_spacing, key):
+def crop_key_image_from_deck_sized_image(
+    deck: StreamDeck, image: Image.Image, key_spacing: tuple[int, int], key: int
+) -> bytes:
     key_rows, key_cols = deck.key_layout()
     key_width, key_height = deck.key_image_format()['size']
     spacing_x, spacing_y = key_spacing
@@ -81,7 +86,7 @@ def crop_key_image_from_deck_sized_image(deck, image, key_spacing, key):
 
 
 # Closes the StreamDeck device on key state change.
-def key_change_callback(deck, key, state):
+def key_change_callback(deck: StreamDeck, key: int, state: bool) -> None:
     # Use a scoped-with on the deck to ensure we're the only thread using it
     # right now.
     with deck:
