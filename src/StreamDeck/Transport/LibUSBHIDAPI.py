@@ -42,7 +42,7 @@ class LibUSBHIDAPI(Transport):
                         text=True,
                         check=True,
                     ).stdout.strip()  # nosec
-                except:  # nosec B110
+                except Exception:  # nosec B110
                     pass
 
             return homebrew_path
@@ -75,7 +75,7 @@ class LibUSBHIDAPI(Transport):
                 )
                 try:
                     found_lib = ctypes.util.find_library(library_name_no_extension)
-                except:
+                except Exception:
                     found_lib = None
 
                 # If we've running with a Homebrew installation, and find_library() didn't find the library in
@@ -93,7 +93,7 @@ class LibUSBHIDAPI(Transport):
                         found_lib if found_lib else lib_name
                     )
                     break
-                except:  # nosec B110
+                except Exception:  # nosec B110
                     pass
             else:
                 return None

@@ -14,6 +14,7 @@ displayed using a periodic timer.
 """
 
 import itertools
+import logging
 import os
 import threading
 import time
@@ -73,7 +74,7 @@ def key_change_callback(deck: StreamDeck, key: int, state: bool) -> None:
 if __name__ == "__main__":
     streamdecks = DeviceManager().enumerate()
 
-    print("Found {} Stream Deck(s).\n".format(len(streamdecks)))
+    logging.info("Found %s Stream Deck(s).", len(streamdecks))
 
     for index, deck in enumerate(streamdecks):
         # This example only works with devices that have screens.
@@ -83,20 +84,24 @@ if __name__ == "__main__":
         deck.open()
         deck.reset()
 
-        print("Opened '{}' device (serial number: '{}')".format(deck.deck_type(), deck.get_serial_number()))
+        logging.info(
+            "Opened '%s' device (serial number: '%s')",
+            deck.deck_type(),
+            deck.get_serial_number(),
+        )
 
         # Set initial screen brightness to 30%.
         deck.set_brightness(30)
 
         # Pre-render a list of animation frames for each source image, in the
         # native display format so that they can be quickly sent to the device.
-        print("Loading animations...")
+        logging.info("Loading animations...")
         animations = [
             create_animation_frames(deck, "Elephant_Walking_animated.gif"),
             create_animation_frames(deck, "RGB_color_space_animated_view.gif"),
             create_animation_frames(deck, "Simple_CV_Joint_animated.gif"),
         ]
-        print("Ready.")
+        logging.info("Ready.")
 
         # Create a mapping of StreamDeck keys to animation image sets that will
         # be displayed.
@@ -135,7 +140,7 @@ if __name__ == "__main__":
                         for key, frames in key_images.items():
                             deck.set_key_image(key, next(frames))
                 except TransportError as err:
-                    print("TransportError: {0}".format(err))
+                    logging.error("TransportError: %s", err)
                     # Something went wrong while communicating with the device
                     # (closed?) - don't re-schedule the next animation frame.
                     break

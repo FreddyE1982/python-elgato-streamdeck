@@ -2,3 +2,5 @@ flake8
 bandit
 mypy
 pytest
+black
+ruff

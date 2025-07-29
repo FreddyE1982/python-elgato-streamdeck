@@ -2,7 +2,7 @@
 About
 #####
 
-.. image:: ../../ExampleDeck.jpg
+.. image:: assets/ExampleDeck.jpg
    :alt: Example StreamDeck Device
 
 This is an open source Python 3 library to control an `Elgato Stream Deck
@@ -40,6 +40,7 @@ Index
     examples/plus.rst
     examples/neo.rst
     examples/tiled.rst
+    examples/touchscreen.rst
     examples/animated.rst
 
 

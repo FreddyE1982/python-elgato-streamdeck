@@ -13,6 +13,7 @@ Generates key images at runtime and reacts to button presses.
 """
 
 from pathlib import Path
+import logging
 import threading
 from typing import Dict
 
@@ -101,7 +102,7 @@ def update_key_image(deck: StreamDeck, key: int, state: bool) -> None:
 # associated actions when a key is pressed.
 def key_change_callback(deck: StreamDeck, key: int, state: bool) -> None:
     # Print new key state
-    print("Deck {} Key {} = {}".format(deck.id(), key, state), flush=True)
+    logging.info("Deck %s Key %s = %s", deck.id(), key, state)
 
     # Don't try to draw an image on a touch button
     if key >= deck.key_count():
@@ -129,7 +130,7 @@ def key_change_callback(deck: StreamDeck, key: int, state: bool) -> None:
 if __name__ == "__main__":
     streamdecks = DeviceManager().enumerate()
 
-    print("Found {} Stream Deck(s).\n".format(len(streamdecks)))
+    logging.info("Found %s Stream Deck(s).", len(streamdecks))
 
     for index, deck in enumerate(streamdecks):
         # This example only works with devices that have screens.
@@ -139,10 +140,11 @@ if __name__ == "__main__":
         deck.open()
         deck.reset()
 
-        print(
-            "Opened '{}' device (serial number: '{}', fw: '{}')".format(
-                deck.deck_type(), deck.get_serial_number(), deck.get_firmware_version()
-            )
+        logging.info(
+            "Opened '%s' device (serial number: '%s', fw: '%s')",
+            deck.deck_type(),
+            deck.get_serial_number(),
+            deck.get_firmware_version(),
         )
 
         # Set initial screen brightness to 30%.

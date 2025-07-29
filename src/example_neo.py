@@ -12,6 +12,7 @@
 import os
 import threading
 import random
+import logging
 
 from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.DeviceManager import DeviceManager
@@ -38,7 +39,13 @@ def render_key_image(
     # label onto the image a few pixels from the bottom of the key.
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype(font_filename, 14)
-    draw.text((image.width / 2, image.height - 5), text=label_text, font=font, anchor="ms", fill="white")
+    draw.text(
+        (image.width / 2, image.height - 5),
+        text=label_text,
+        font=font,
+        anchor="ms",
+        fill="white",
+    )
 
     return PILHelper.to_native_key_format(deck, image)
 
@@ -49,7 +56,13 @@ def render_screen_image(deck: StreamDeck, font_filename: str, text: str) -> byte
     # Load a custom TrueType font and use it to create an image
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype(font_filename, 20)
-    draw.text((image.width / 2, image.height - 25), text=text, font=font, anchor="ms", fill="white")
+    draw.text(
+        (image.width / 2, image.height - 25),
+        text=text,
+        font=font,
+        anchor="ms",
+        fill="white",
+    )
 
     return PILHelper.to_native_screen_format(deck, image)
 
@@ -74,7 +87,7 @@ def get_key_style(deck: StreamDeck, key: int, state: bool) -> dict[str, str]:
         "name": name,
         "icon": os.path.join(ASSETS_PATH, icon),
         "font": os.path.join(ASSETS_PATH, font),
-        "label": label
+        "label": label,
     }
 
 
@@ -85,7 +98,9 @@ def update_key_image(deck: StreamDeck, key: int, state: bool) -> None:
     key_style = get_key_style(deck, key, state)
 
     # Generate the custom key with the requested image and label.
-    image = render_key_image(deck, key_style["icon"], key_style["font"], key_style["label"])
+    image = render_key_image(
+        deck, key_style["icon"], key_style["font"], key_style["label"]
+    )
 
     # Use a scoped-with on the deck to ensure we're the only thread using it
     # right now.
@@ -98,7 +113,7 @@ def update_key_image(deck: StreamDeck, key: int, state: bool) -> None:
 # associated actions when a key is pressed.
 def key_change_callback(deck: StreamDeck, key: int, state: bool) -> None:
     # Print new key state
-    print("Deck {} Key {} = {}".format(deck.id(), key, state), flush=True)
+    logging.info("Deck %s Key %s = %s", deck.id(), key, state)
 
     # Don't try to set an image for touch buttons but set a random color
     if key >= deck.key_count():
@@ -136,7 +151,7 @@ def set_random_touch_color(deck: StreamDeck, key: int) -> None:
 if __name__ == "__main__":
     streamdecks = DeviceManager().enumerate()
 
-    print("Found {} Stream Deck(s).\n".format(len(streamdecks)))
+    logging.info("Found %s Stream Deck(s).", len(streamdecks))
 
     for index, deck in enumerate(streamdecks):
         # This example only works with devices that have screens.
@@ -146,9 +161,12 @@ if __name__ == "__main__":
         deck.open()
         deck.reset()
 
-        print("Opened '{}' device (serial number: '{}', fw: '{}')".format(
-            deck.deck_type(), deck.get_serial_number(), deck.get_firmware_version()
-        ))
+        logging.info(
+            "Opened '%s' device (serial number: '%s', fw: '%s')",
+            deck.deck_type(),
+            deck.get_serial_number(),
+            deck.get_firmware_version(),
+        )
 
         # Set initial screen brightness to 30%.
         deck.set_brightness(30)
@@ -161,7 +179,9 @@ if __name__ == "__main__":
         deck.set_key_callback(key_change_callback)
 
         # Set a screen image
-        image = render_screen_image(deck, os.path.join(ASSETS_PATH, "Roboto-Regular.ttf"), "Python StreamDeck")
+        image = render_screen_image(
+            deck, os.path.join(ASSETS_PATH, "Roboto-Regular.ttf"), "Python StreamDeck"
+        )
         deck.set_screen_image(image)
 
         # Wait until all application threads have terminated (for this example,

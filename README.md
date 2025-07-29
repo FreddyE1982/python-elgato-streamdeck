@@ -1,6 +1,9 @@
 # Python Elgato Stream Deck Library
 
-![Example Deck](ExampleDeck.jpg)
+![CI](https://github.com/abcminiuser/python-elgato-streamdeck/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/coverage-unknown-lightgrey.svg)
+
+![Example Deck](doc/source/assets/ExampleDeck.jpg)
 
 This is an open source Python 3 library to control an
 [Elgato Stream Deck](https://www.elgato.com/en/gaming/stream-deck) directly,
@@ -77,8 +80,9 @@ usage patterns:
 * `example_animated.py` – display animated graphics using pre-rendered frames.
 * `example_pedal.py` – read events from the Stream Deck Pedal.
 * `example_plus.py` – demonstrate dial and touchscreen features of the Plus.
-* `example_neo.py` – show usage of the Neo\'s small screen and extra touch keys.
+* `example_neo.py` – show usage of the Neo's small screen and extra touch keys.
 * `example_list_decks.py` – simple script printing connected deck information.
+* `example_test_cli.py` – run the unit test suite against a dummy deck.
 
 ## Package Installation:
 
@@ -180,4 +184,17 @@ pytest
 The library consults the optional ``HOMEBREW_PREFIX`` variable when searching
 for the ``libusb`` shared library on macOS systems installed via Homebrew. Set
 it to your Homebrew prefix if the library cannot be located automatically.
+
+## Building Documentation
+
+The Sphinx documentation can be built locally by installing the documentation
+requirements and invoking ``make`` in the ``doc`` directory:
+
+```bash
+pip install -r doc/requirements.txt
+cd doc
+make html
+```
+
+Open ``doc/build/html/index.html`` in your browser to view the generated docs.
 
