@@ -13,7 +13,7 @@ The following steps are ordered from simple documentation updates to complex arc
 9. Clarify device support matrix in documentation. **complete**
 10. Add missing docstrings to all example scripts. **complete**
 11. Enable strict linting rules by adjusting `.flake8` ignores. **complete**
-12. Add type hints to all functions in `src/example_basic.py`.
+12. Add type hints to all functions in `src/example_basic.py`. **complete**
 13. Apply type hints to remaining example scripts.
 14. Add `mypy` configuration and initial check in CI.
 15. Create a CONTRIBUTING guide outlining development workflow.

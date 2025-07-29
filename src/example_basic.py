@@ -14,11 +14,13 @@ Generates key images at runtime and reacts to button presses.
 
 import os
 import threading
+from typing import Dict
 
 from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.ImageHelpers import PILHelper
 from StreamDeck.Transport.Transport import TransportError
+from StreamDeck.Devices.StreamDeck import StreamDeck
 
 # Folder location of image assets used by this example.
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
@@ -26,7 +28,12 @@ ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
 
 # Generates a custom tile with run-time generated text and custom image via the
 # PIL module.
-def render_key_image(deck, icon_filename, font_filename, label_text):
+def render_key_image(
+    deck: StreamDeck,
+    icon_filename: str,
+    font_filename: str,
+    label_text: str,
+) -> bytes:
     # Resize the source image asset to best-fit the dimensions of a single key,
     # leaving a margin at the bottom so that we can draw the key title
     # afterwards.
@@ -43,7 +50,7 @@ def render_key_image(deck, icon_filename, font_filename, label_text):
 
 
 # Returns styling information for a key based on its position and state.
-def get_key_style(deck, key, state):
+def get_key_style(deck: StreamDeck, key: int, state: bool) -> Dict[str, str]:
     # Last button in the example application is the exit button.
     exit_key_index = deck.key_count() - 1
 
@@ -68,7 +75,7 @@ def get_key_style(deck, key, state):
 
 # Creates a new key image based on the key index, style and current key state
 # and updates the image on the StreamDeck.
-def update_key_image(deck, key, state):
+def update_key_image(deck: StreamDeck, key: int, state: bool) -> None:
     # Determine what icon and label to use on the generated key.
     key_style = get_key_style(deck, key, state)
 
@@ -84,7 +91,7 @@ def update_key_image(deck, key, state):
 
 # Prints key state change information, updates rhe key image and performs any
 # associated actions when a key is pressed.
-def key_change_callback(deck, key, state):
+def key_change_callback(deck: StreamDeck, key: int, state: bool) -> None:
     # Print new key state
     print("Deck {} Key {} = {}".format(deck.id(), key, state), flush=True)
 
