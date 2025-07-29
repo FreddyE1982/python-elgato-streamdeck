@@ -7,9 +7,7 @@
 #         www.fourwalledcubicle.com
 #
 
-# Example script showing basic library usage, printing button presses. This
-# example only shows key events, and is intended to demonstrate how to get
-# such events from device that lack screens, i.e. the StreamDeck Pedal.
+"""Demonstrate handling key events from a Stream Deck Pedal."""
 
 import threading
 

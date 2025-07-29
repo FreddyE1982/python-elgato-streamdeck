@@ -7,8 +7,7 @@
 #         www.fourwalledcubicle.com
 #
 
-# Example script that prints out information about any discovered StreamDeck
-# devices to the console.
+"""Enumerate connected devices and print their information."""
 
 from StreamDeck.DeviceManager import DeviceManager
 
