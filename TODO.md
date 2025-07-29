@@ -15,28 +15,28 @@ The following steps are ordered from simple documentation updates to complex arc
 11. Enable strict linting rules by adjusting `.flake8` ignores. **complete**
 12. Add type hints to all functions in `src/example_basic.py`. **complete**
 13. Apply type hints to remaining example scripts. **complete**
-14. Add `mypy` configuration and initial check in CI.
+14. Add `mypy` configuration and initial check in CI. **complete**
 15. Create a CONTRIBUTING guide outlining development workflow. **complete**
 16. Update `setup.py` classifiers for supported Python versions. **complete**
-17. Add `__all__` definitions to modules missing them.
+17. Add `__all__` definitions to modules missing them. **complete**
 18. Document available transports in `README.md`. **complete**
 19. Create a script to list connected Stream Decks. **complete**
 20. Add unit tests for `DeviceManager.enumerate` using dummy transport. **complete**
-21. Document testing instructions in `README.md`.
+21. Document testing instructions in `README.md`. **complete**
 22. Provide example images in a dedicated `assets` section of docs.
-23. Document environment variables used by the library.
-24. Replace direct path manipulation with `pathlib` in `example_basic.py`.
-25. Add docstrings to all methods in `DeviceMonitor`.
-26. Add type hints to `DeviceMonitor` methods.
-27. Expand test coverage for `DeviceMonitor` start/stop behavior.
-28. Add docstrings to `MacroDeck` private helper methods.
+23. Document environment variables used by the library. **complete**
+24. Replace direct path manipulation with `pathlib` in `example_basic.py`. **complete**
+25. Add docstrings to all methods in `DeviceMonitor`. **complete**
+26. Add type hints to `DeviceMonitor` methods. **complete**
+27. Expand test coverage for `DeviceMonitor` start/stop behavior. **complete**
+28. Add docstrings to `MacroDeck` private helper methods. **complete**
 29. Enforce `black` formatting via CI.
 30. Move CLI logic in tests into separate example script.
 31. Replace `print` statements with `logging` in examples.
-32. Create unit tests for `MacroDeck.get_board_char` error conditions.
+32. Create unit tests for `MacroDeck.get_board_char` error conditions. **complete**
 33. Add docstrings to `Transport` abstract methods.
 34. Document return types in `Transport` subclasses.
-35. Add test to confirm `Dummy` transport logs messages.
+35. Add test to confirm `Dummy` transport logs messages. **complete**
 36. Incorporate continuous integration using GitHub Actions.
 37. Add badges for build status and coverage to `README.md`.
 38. Implement `ruff` for linting and integrate with CI.

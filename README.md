@@ -175,3 +175,9 @@ The unit tests require no hardware and run entirely against a virtual Stream Dec
 pytest
 ```
 
+## Environment Variables
+
+The library consults the optional ``HOMEBREW_PREFIX`` variable when searching
+for the ``libusb`` shared library on macOS systems installed via Homebrew. Set
+it to your Homebrew prefix if the library cannot be located automatically.
+

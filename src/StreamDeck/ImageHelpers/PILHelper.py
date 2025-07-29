@@ -12,10 +12,10 @@ from ..Devices.StreamDeck import StreamDeck
 
 
 def _create_image(image_format, background):
-    return Image.new("RGB", image_format['size'], background)
+    return Image.new("RGB", image_format["size"], background)
 
 
-def _scale_image(image, image_format, margins=(0, 0, 0, 0), background='black'):
+def _scale_image(image, image_format, margins=(0, 0, 0, 0), background="black"):
     if len(margins) != 4:
         raise ValueError("Margins should be given as an array of four integers.")
 
@@ -27,8 +27,8 @@ def _scale_image(image, image_format, margins=(0, 0, 0, 0), background='black'):
     thumbnail = image.convert("RGBA")
     thumbnail.thumbnail((thumbnail_max_width, thumbnail_max_height), Image.LANCZOS)
 
-    thumbnail_x = (margins[3] + (thumbnail_max_width - thumbnail.width) // 2)
-    thumbnail_y = (margins[0] + (thumbnail_max_height - thumbnail.height) // 2)
+    thumbnail_x = margins[3] + (thumbnail_max_width - thumbnail.width) // 2
+    thumbnail_y = margins[0] + (thumbnail_max_height - thumbnail.height) // 2
 
     final_image.paste(thumbnail, (thumbnail_x, thumbnail_y), thumbnail)
 
@@ -36,25 +36,25 @@ def _scale_image(image, image_format, margins=(0, 0, 0, 0), background='black'):
 
 
 def _to_native_format(image, image_format):
-    if image.size != image_format['size']:
-        image.thumbnail(image_format['size'])
+    if image.size != image_format["size"]:
+        image.thumbnail(image_format["size"])
 
-    if image_format['rotation']:
-        image = image.rotate(image_format['rotation'])
+    if image_format["rotation"]:
+        image = image.rotate(image_format["rotation"])
 
-    if image_format['flip'][0]:
+    if image_format["flip"][0]:
         image = image.transpose(Image.FLIP_LEFT_RIGHT)
 
-    if image_format['flip'][1]:
+    if image_format["flip"][1]:
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
 
     # We want a compressed image in a given codec, convert.
     with io.BytesIO() as compressed_image:
-        image.save(compressed_image, image_format['format'], quality=100)
+        image.save(compressed_image, image_format["format"], quality=100)
         return compressed_image.getvalue()
 
 
-def create_image(deck: StreamDeck, background: str = 'black') -> Image.Image:
+def create_image(deck: StreamDeck, background: str = "black") -> Image.Image:
     """
     .. deprecated:: 0.9.5
         Use :func:`~PILHelper.create_key_image` method instead.
@@ -62,7 +62,7 @@ def create_image(deck: StreamDeck, background: str = 'black') -> Image.Image:
     return create_key_image(deck, background)
 
 
-def create_key_image(deck: StreamDeck, background: str = 'black') -> Image.Image:
+def create_key_image(deck: StreamDeck, background: str = "black") -> Image.Image:
     """
     Creates a new PIL Image with the correct image dimensions for the given
     StreamDeck device's keys.
@@ -80,7 +80,9 @@ def create_key_image(deck: StreamDeck, background: str = 'black') -> Image.Image
     return _create_image(deck.key_image_format(), background)
 
 
-def create_touchscreen_image(deck: StreamDeck, background: str = 'black') -> Image.Image:
+def create_touchscreen_image(
+    deck: StreamDeck, background: str = "black"
+) -> Image.Image:
     """
     Creates a new PIL Image with the correct image dimensions for the given
     StreamDeck device's touchscreen.
@@ -98,7 +100,7 @@ def create_touchscreen_image(deck: StreamDeck, background: str = 'black') -> Ima
     return _create_image(deck.touchscreen_image_format(), background)
 
 
-def create_screen_image(deck: StreamDeck, background: str = 'black') -> Image.Image:
+def create_screen_image(deck: StreamDeck, background: str = "black") -> Image.Image:
     """
     Creates a new PIL Image with the correct image dimensions for the given
     StreamDeck device's screen.
@@ -116,7 +118,12 @@ def create_screen_image(deck: StreamDeck, background: str = 'black') -> Image.Im
     return _create_image(deck.screen_image_format(), background)
 
 
-def create_scaled_image(deck: StreamDeck, image: Image.Image, margins: tuple[int, int, int, int] = (0, 0, 0, 0), background: str = 'black') -> Image.Image:
+def create_scaled_image(
+    deck: StreamDeck,
+    image: Image.Image,
+    margins: tuple[int, int, int, int] = (0, 0, 0, 0),
+    background: str = "black",
+) -> Image.Image:
     """
     .. deprecated:: 0.9.5
         Use :func:`~PILHelper.create_scaled_key_image` method instead.
@@ -124,7 +131,12 @@ def create_scaled_image(deck: StreamDeck, image: Image.Image, margins: tuple[int
     return create_scaled_key_image(deck, image, margins, background)
 
 
-def create_scaled_key_image(deck: StreamDeck, image: Image.Image, margins: tuple[int, int, int, int] = (0, 0, 0, 0), background: str = 'black') -> Image.Image:
+def create_scaled_key_image(
+    deck: StreamDeck,
+    image: Image.Image,
+    margins: tuple[int, int, int, int] = (0, 0, 0, 0),
+    background: str = "black",
+) -> Image.Image:
     """
     Creates a new key image that contains a scaled version of a given image,
     resized to best fit the given StreamDeck device's keys with the given
@@ -148,7 +160,12 @@ def create_scaled_key_image(deck: StreamDeck, image: Image.Image, margins: tuple
     return _scale_image(image, deck.key_image_format(), margins, background)
 
 
-def create_scaled_touchscreen_image(deck: StreamDeck, image: Image.Image, margins: tuple[int, int, int, int] = (0, 0, 0, 0), background: str = 'black') -> Image.Image:
+def create_scaled_touchscreen_image(
+    deck: StreamDeck,
+    image: Image.Image,
+    margins: tuple[int, int, int, int] = (0, 0, 0, 0),
+    background: str = "black",
+) -> Image.Image:
     """
     Creates a new touchscreen image that contains a scaled version of a given image,
     resized to best fit the given StreamDeck device's touchscreen with the given
@@ -172,7 +189,12 @@ def create_scaled_touchscreen_image(deck: StreamDeck, image: Image.Image, margin
     return _scale_image(image, deck.touchscreen_image_format(), margins, background)
 
 
-def create_scaled_screen_image(deck: StreamDeck, image: Image.Image, margins: tuple[int, int, int, int] = (0, 0, 0, 0), background: str = 'black') -> Image.Image:
+def create_scaled_screen_image(
+    deck: StreamDeck,
+    image: Image.Image,
+    margins: tuple[int, int, int, int] = (0, 0, 0, 0),
+    background: str = "black",
+) -> Image.Image:
     """
     Creates a new screen image that contains a scaled version of a given image,
     resized to best fit the given StreamDeck device's screen with the given
@@ -314,3 +336,21 @@ def split_deck_image(
         key_images[idx] = to_native_key_format(deck, key_img)
 
     return key_images
+
+
+__all__ = [
+    "create_image",
+    "create_key_image",
+    "create_touchscreen_image",
+    "create_screen_image",
+    "create_scaled_image",
+    "create_scaled_key_image",
+    "create_scaled_touchscreen_image",
+    "create_scaled_screen_image",
+    "to_native_format",
+    "to_native_key_format",
+    "to_native_touchscreen_format",
+    "to_native_screen_format",
+    "create_deck_sized_image",
+    "split_deck_image",
+]
