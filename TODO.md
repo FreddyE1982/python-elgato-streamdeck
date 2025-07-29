@@ -43,11 +43,36 @@ The following steps are ordered from simple documentation updates to complex arc
 39. Document how to build and view Sphinx docs locally. **complete**
 40. Add code examples for touchscreen APIs in docs. **complete**
 41. Split large constants in device classes into separate module.
+    - Identify all constant attributes across `StreamDeck` device subclasses.
+    - Create new module `StreamDeck/DeviceConstants.py`.
+    - Move the constants into the new module without altering values.
+    - Update device classes to import from `DeviceConstants`.
+    - Add unit tests ensuring constants remain accessible.
 42. Replace magic numbers with named constants in device implementations.
+    - Audit device modules for numeric literals.
+    - Introduce descriptive constant names in `DeviceConstants`.
+    - Substitute literals with the new constants.
+    - Ensure no behaviour changes via targeted unit tests.
 43. Refactor repeated JPEG header bytes into a helper function.
+    - Locate all occurrences of raw JPEG header byte sequences.
+    - Add `build_jpeg_header()` to new helper module.
+    - Replace direct byte arrays with calls to the helper.
+    - Verify image payloads remain identical via tests.
 44. Add a central configuration class for library settings.
+    - Design `Config` dataclass exposing defaults for key parameters.
+    - Place the class in `StreamDeck/config.py`.
+    - Update modules to read settings from this class.
+    - Document configuration usage in the README.
 45. Create dedicated exception classes for common error cases.
+    - Enumerate frequent error conditions across modules.
+    - Add new exceptions in `StreamDeck/exceptions.py`.
+    - Replace generic raises with the new exceptions.
+    - Extend tests to cover exception handling paths.
 46. Introduce logging configuration helper for applications.
+    - Provide `setup_logging(level: int)` in `StreamDeck/logging_utils.py`.
+    - Allow configuring log format and output destination.
+    - Update examples to use this helper.
+    - Add unit tests verifying log messages appear with chosen level.
 47. Update `MacroDeck.run_loop` to support custom sleep functions.
 48. Write tests for `MacroDeck.swap_key_configurations` edge cases.
 49. Document concurrency considerations for callbacks.
