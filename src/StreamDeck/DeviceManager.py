@@ -18,6 +18,8 @@ from .Transport.Dummy import Dummy
 from .Transport.LibUSBHIDAPI import LibUSBHIDAPI
 from .ProductIDs import USBVendorIDs, USBProductIDs
 
+__all__ = ["ProbeError", "DeviceManager"]
+
 
 class ProbeError(Exception):
     """
@@ -35,12 +37,12 @@ class DeviceManager:
     StreamDeck devices.
     """
 
-    USB_VID_ELGATO = 0x0fd9
+    USB_VID_ELGATO = 0x0FD9
     USB_PID_STREAMDECK_ORIGINAL = 0x0060
-    USB_PID_STREAMDECK_ORIGINAL_V2 = 0x006d
+    USB_PID_STREAMDECK_ORIGINAL_V2 = 0x006D
     USB_PID_STREAMDECK_MINI = 0x0063
-    USB_PID_STREAMDECK_NEO = 0x009a
-    USB_PID_STREAMDECK_XL = 0x006c
+    USB_PID_STREAMDECK_NEO = 0x009A
+    USB_PID_STREAMDECK_XL = 0x006C
     USB_PID_STREAMDECK_MK2 = 0x0080
     USB_PID_STREAMDECK_PEDAL = 0x0086
     USB_PID_STREAMDECK_PLUS = 0x0084
@@ -67,13 +69,18 @@ class DeviceManager:
             transport_class = transports.get(transport)
 
             if transport_class is None:
-                raise ProbeError("Unknown HID transport backend \"{}\".".format(transport))
+                raise ProbeError(
+                    'Unknown HID transport backend "{}".'.format(transport)
+                )
 
             try:
                 transport_class.probe()
                 return transport_class()
             except Exception as transport_error:
-                raise ProbeError("Probe failed on HID backend \"{}\".".format(transport), transport_error)
+                raise ProbeError(
+                    'Probe failed on HID backend "{}".'.format(transport),
+                    transport_error,
+                )
         else:
             probe_errors = {}
 
@@ -87,7 +94,9 @@ class DeviceManager:
                 except Exception as transport_error:
                     probe_errors[transport_name] = transport_error
 
-            raise ProbeError("Probe failed to find any functional HID backend.", probe_errors)
+            raise ProbeError(
+                "Probe failed to find any functional HID backend.", probe_errors
+            )
 
     def __init__(self, transport: str | None = None):
         """
@@ -106,16 +115,56 @@ class DeviceManager:
         """
 
         products = [
-            (USBVendorIDs.USB_VID_ELGATO, USBProductIDs.USB_PID_STREAMDECK_ORIGINAL, StreamDeckOriginal),
-            (USBVendorIDs.USB_VID_ELGATO, USBProductIDs.USB_PID_STREAMDECK_ORIGINAL_V2, StreamDeckOriginalV2),
-            (USBVendorIDs.USB_VID_ELGATO, USBProductIDs.USB_PID_STREAMDECK_MINI, StreamDeckMini),
-            (USBVendorIDs.USB_VID_ELGATO, USBProductIDs.USB_PID_STREAMDECK_NEO, StreamDeckNeo),
-            (USBVendorIDs.USB_VID_ELGATO, USBProductIDs.USB_PID_STREAMDECK_XL, StreamDeckXL),
-            (USBVendorIDs.USB_VID_ELGATO, USBProductIDs.USB_PID_STREAMDECK_MK2, StreamDeckOriginalV2),
-            (USBVendorIDs.USB_VID_ELGATO, USBProductIDs.USB_PID_STREAMDECK_PEDAL, StreamDeckPedal),
-            (USBVendorIDs.USB_VID_ELGATO, USBProductIDs.USB_PID_STREAMDECK_MINI_MK2, StreamDeckMini),
-            (USBVendorIDs.USB_VID_ELGATO, USBProductIDs.USB_PID_STREAMDECK_XL_V2, StreamDeckXL),
-            (USBVendorIDs.USB_VID_ELGATO, USBProductIDs.USB_PID_STREAMDECK_PLUS, StreamDeckPlus),
+            (
+                USBVendorIDs.USB_VID_ELGATO,
+                USBProductIDs.USB_PID_STREAMDECK_ORIGINAL,
+                StreamDeckOriginal,
+            ),
+            (
+                USBVendorIDs.USB_VID_ELGATO,
+                USBProductIDs.USB_PID_STREAMDECK_ORIGINAL_V2,
+                StreamDeckOriginalV2,
+            ),
+            (
+                USBVendorIDs.USB_VID_ELGATO,
+                USBProductIDs.USB_PID_STREAMDECK_MINI,
+                StreamDeckMini,
+            ),
+            (
+                USBVendorIDs.USB_VID_ELGATO,
+                USBProductIDs.USB_PID_STREAMDECK_NEO,
+                StreamDeckNeo,
+            ),
+            (
+                USBVendorIDs.USB_VID_ELGATO,
+                USBProductIDs.USB_PID_STREAMDECK_XL,
+                StreamDeckXL,
+            ),
+            (
+                USBVendorIDs.USB_VID_ELGATO,
+                USBProductIDs.USB_PID_STREAMDECK_MK2,
+                StreamDeckOriginalV2,
+            ),
+            (
+                USBVendorIDs.USB_VID_ELGATO,
+                USBProductIDs.USB_PID_STREAMDECK_PEDAL,
+                StreamDeckPedal,
+            ),
+            (
+                USBVendorIDs.USB_VID_ELGATO,
+                USBProductIDs.USB_PID_STREAMDECK_MINI_MK2,
+                StreamDeckMini,
+            ),
+            (
+                USBVendorIDs.USB_VID_ELGATO,
+                USBProductIDs.USB_PID_STREAMDECK_XL_V2,
+                StreamDeckXL,
+            ),
+            (
+                USBVendorIDs.USB_VID_ELGATO,
+                USBProductIDs.USB_PID_STREAMDECK_PLUS,
+                StreamDeckPlus,
+            ),
         ]
 
         streamdecks = list()

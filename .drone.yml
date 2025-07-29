@@ -23,7 +23,7 @@ steps:
   image: abcminiuser/docker-ci-python:latest
   pull: always
   commands:
-  - mypy --ignore-missing-imports src/
+  - mypy --config-file mypy.ini src/
 
 - name: Tests
   image: abcminiuser/docker-ci-python:latest

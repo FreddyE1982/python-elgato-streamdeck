@@ -12,7 +12,7 @@
 Generates key images at runtime and reacts to button presses.
 """
 
-import os
+from pathlib import Path
 import threading
 from typing import Dict
 
@@ -23,7 +23,7 @@ from StreamDeck.Transport.Transport import TransportError
 from StreamDeck.Devices.StreamDeck import StreamDeck
 
 # Folder location of image assets used by this example.
-ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
+ASSETS_PATH = Path(__file__).resolve().parent / "Assets"
 
 
 # Generates a custom tile with run-time generated text and custom image via the
@@ -44,7 +44,13 @@ def render_key_image(
     # label onto the image a few pixels from the bottom of the key.
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype(font_filename, 14)
-    draw.text((image.width / 2, image.height - 5), text=label_text, font=font, anchor="ms", fill="white")
+    draw.text(
+        (image.width / 2, image.height - 5),
+        text=label_text,
+        font=font,
+        anchor="ms",
+        fill="white",
+    )
 
     return PILHelper.to_native_key_format(deck, image)
 
@@ -67,9 +73,9 @@ def get_key_style(deck: StreamDeck, key: int, state: bool) -> Dict[str, str]:
 
     return {
         "name": name,
-        "icon": os.path.join(ASSETS_PATH, icon),
-        "font": os.path.join(ASSETS_PATH, font),
-        "label": label
+        "icon": str(ASSETS_PATH / icon),
+        "font": str(ASSETS_PATH / font),
+        "label": label,
     }
 
 
@@ -80,7 +86,9 @@ def update_key_image(deck: StreamDeck, key: int, state: bool) -> None:
     key_style = get_key_style(deck, key, state)
 
     # Generate the custom key with the requested image and label.
-    image = render_key_image(deck, key_style["icon"], key_style["font"], key_style["label"])
+    image = render_key_image(
+        deck, key_style["icon"], key_style["font"], key_style["label"]
+    )
 
     # Use a scoped-with on the deck to ensure we're the only thread using it
     # right now.
@@ -131,9 +139,11 @@ if __name__ == "__main__":
         deck.open()
         deck.reset()
 
-        print("Opened '{}' device (serial number: '{}', fw: '{}')".format(
-            deck.deck_type(), deck.get_serial_number(), deck.get_firmware_version()
-        ))
+        print(
+            "Opened '{}' device (serial number: '{}', fw: '{}')".format(
+                deck.deck_type(), deck.get_serial_number(), deck.get_firmware_version()
+            )
+        )
 
         # Set initial screen brightness to 30%.
         deck.set_brightness(30)

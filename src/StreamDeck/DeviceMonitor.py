@@ -13,11 +13,23 @@ from collections.abc import Callable
 from .DeviceManager import DeviceManager
 from .Devices.StreamDeck import StreamDeck
 
+__all__ = ["DeviceMonitor"]
+
 
 class DeviceMonitor:
     """Monitor StreamDeck connections and disconnections."""
 
-    def __init__(self, manager: DeviceManager, interval: float = 1.0):
+    def __init__(self, manager: DeviceManager, interval: float = 1.0) -> None:
+        """Create a new monitor.
+
+        Parameters
+        ----------
+        manager
+            Device manager used for enumeration.
+        interval
+            Polling interval in seconds.
+        """
+
         self.manager = manager
         self.interval = interval
         self._running = False
@@ -26,8 +38,11 @@ class DeviceMonitor:
         self.on_connect: Callable[[StreamDeck], None] | None = None
         self.on_disconnect: Callable[[StreamDeck], None] | None = None
 
-    def start(self, on_connect: Callable[[StreamDeck], None] | None = None,
-              on_disconnect: Callable[[StreamDeck], None] | None = None) -> None:
+    def start(
+        self,
+        on_connect: Callable[[StreamDeck], None] | None = None,
+        on_disconnect: Callable[[StreamDeck], None] | None = None,
+    ) -> None:
         """Start monitoring for device changes."""
         self.on_connect = on_connect
         self.on_disconnect = on_disconnect
@@ -45,6 +60,7 @@ class DeviceMonitor:
 
     # Internal methods ---------------------------------------------------
     def _run(self) -> None:
+        """Worker thread executing the enumeration loop."""
         while self._running:
             current = {d.id(): d for d in self.manager.enumerate()}
 

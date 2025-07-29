@@ -22,6 +22,8 @@ from .ImageHelpers import PILHelper
 
 from .Devices.StreamDeck import StreamDeck, DialEventType, TouchscreenEventType
 
+__all__ = ["MacroDeck"]
+
 
 class MacroDeck:
     """High level wrapper to attach actions to deck events."""
@@ -29,7 +31,9 @@ class MacroDeck:
     def __init__(self, deck: StreamDeck):
         self.deck = deck
         self.key_macros: dict[int, Callable[[], Any] | str] = {}
-        self.dial_macros: dict[tuple[int, DialEventType], Callable[[Any], Any] | str] = {}
+        self.dial_macros: dict[
+            tuple[int, DialEventType], Callable[[Any], Any] | str
+        ] = {}
         self.touch_macros: dict[TouchscreenEventType, Callable[[Any], Any] | str] = {}
         self.key_configs: dict[int, dict[str, Any]] = {}
         self.enabled: bool = True
@@ -67,11 +71,15 @@ class MacroDeck:
         """Register a macro action for a key press."""
         self.key_macros[key] = action
 
-    def register_dial_macro(self, dial: int, event: DialEventType, action: Callable[[Any], Any] | str) -> None:
+    def register_dial_macro(
+        self, dial: int, event: DialEventType, action: Callable[[Any], Any] | str
+    ) -> None:
         """Register a macro action for a dial event."""
         self.dial_macros[(dial, event)] = action
 
-    def register_touch_macro(self, event: TouchscreenEventType, action: Callable[[Any], Any] | str) -> None:
+    def register_touch_macro(
+        self, event: TouchscreenEventType, action: Callable[[Any], Any] | str
+    ) -> None:
         """Register a macro action for a touchscreen event."""
         self.touch_macros[event] = action
 
@@ -87,22 +95,30 @@ class MacroDeck:
         """Remove the macro action associated with a touchscreen event."""
         self.touch_macros.pop(event, None)
 
-    def get_dial_macro(self, dial: int, event: DialEventType) -> Callable[[Any], Any] | str | None:
+    def get_dial_macro(
+        self, dial: int, event: DialEventType
+    ) -> Callable[[Any], Any] | str | None:
         """Retrieve the macro action registered for a dial event, if any."""
         return self.dial_macros.get((dial, event))
 
-    def get_touch_macro(self, event: TouchscreenEventType) -> Callable[[Any], Any] | str | None:
+    def get_touch_macro(
+        self, event: TouchscreenEventType
+    ) -> Callable[[Any], Any] | str | None:
         """Retrieve the macro action registered for a touchscreen event, if any."""
         return self.touch_macros.get(event)
 
-    def update_dial_macro(self, dial: int, event: DialEventType, action: Callable[[Any], Any] | str | None) -> None:
+    def update_dial_macro(
+        self, dial: int, event: DialEventType, action: Callable[[Any], Any] | str | None
+    ) -> None:
         """Update or remove the macro action for a dial event."""
         if action is None:
             self.unregister_dial_macro(dial, event)
         else:
             self.register_dial_macro(dial, event, action)
 
-    def update_touch_macro(self, event: TouchscreenEventType, action: Callable[[Any], Any] | str | None) -> None:
+    def update_touch_macro(
+        self, event: TouchscreenEventType, action: Callable[[Any], Any] | str | None
+    ) -> None:
         """Update or remove the macro action for a touchscreen event."""
         if action is None:
             self.unregister_touch_macro(event)
@@ -273,9 +289,7 @@ class MacroDeck:
         for event, action in macros.items():
             self.register_touch_macro(event, action)
 
-    def unregister_touch_macros(
-        self, events: Iterable[TouchscreenEventType]
-    ) -> None:
+    def unregister_touch_macros(self, events: Iterable[TouchscreenEventType]) -> None:
         """Remove macros for the specified touch events."""
         for event in events:
             self.unregister_touch_macro(event)
@@ -298,7 +312,9 @@ class MacroDeck:
                 pressedcallback=params.get("pressedcallback"),
             )
 
-    def update_key_configurations_bulk(self, configs: dict[int, dict[str, Any]]) -> None:
+    def update_key_configurations_bulk(
+        self, configs: dict[int, dict[str, Any]]
+    ) -> None:
         """Update multiple key configurations at once."""
         for key, params in configs.items():
             self.update_key_configuration(
@@ -336,7 +352,9 @@ class MacroDeck:
         """Return the stored configuration dictionary for a key, if present."""
         return self.key_configs.get(key)
 
-    def update_key_macro(self, key: int, action: Callable[[], Any] | str | None) -> None:
+    def update_key_macro(
+        self, key: int, action: Callable[[], Any] | str | None
+    ) -> None:
         """Update or remove the macro action for a key press."""
         if action is None:
             self.unregister_key_macro(key)
@@ -419,9 +437,13 @@ class MacroDeck:
         else:
             self.update_key_configuration(key, upimage=path)
 
-    def set_key_image_pil(self, key: int, image: Image.Image, pressed: bool = False) -> None:
+    def set_key_image_pil(
+        self, key: int, image: Image.Image, pressed: bool = False
+    ) -> None:
         """Display a PIL image on a key."""
-        img = PILHelper.to_native_key_format(self.deck, PILHelper.create_scaled_key_image(self.deck, image))
+        img = PILHelper.to_native_key_format(
+            self.deck, PILHelper.create_scaled_key_image(self.deck, image)
+        )
         config = self.key_configs.get(key, {"up_image": None, "down_image": None})
         if pressed:
             config["down_image"] = img
@@ -431,7 +453,9 @@ class MacroDeck:
         if self.deck.is_visual():
             self.deck.set_key_image(key, img)
 
-    def set_key_image_bytes(self, key: int, image: bytes | None, pressed: bool = False) -> None:
+    def set_key_image_bytes(
+        self, key: int, image: bytes | None, pressed: bool = False
+    ) -> None:
         """Display a pre-formatted image on a key."""
         config = self.key_configs.get(key, {"up_image": None, "down_image": None})
         if pressed:
@@ -465,7 +489,9 @@ class MacroDeck:
         if self.deck.is_visual():
             self.deck.set_key_image(key, None)
 
-    def copy_key_image(self, source: int, destination: int, pressed: bool = False) -> None:
+    def copy_key_image(
+        self, source: int, destination: int, pressed: bool = False
+    ) -> None:
         """Copy the image from ``source`` key to ``destination`` key."""
         if source == destination:
             return
@@ -473,7 +499,9 @@ class MacroDeck:
         img = self.get_key_image(source, pressed)
         self.set_key_image_bytes(destination, img, pressed)
 
-    def move_key_image(self, source: int, destination: int, pressed: bool = False) -> None:
+    def move_key_image(
+        self, source: int, destination: int, pressed: bool = False
+    ) -> None:
         """Move the image from ``source`` key to ``destination`` key."""
         self.copy_key_image(source, destination, pressed)
         self.clear_key_image(source, pressed)
@@ -549,7 +577,9 @@ class MacroDeck:
     # Board helpers -----------------------------------------------------
     def create_board(self, fill: str = " ") -> None:
         """Create an internal character board and display it."""
-        self.board = [[fill for _ in range(self.deck.KEY_COLS)] for _ in range(self.deck.KEY_ROWS)]
+        self.board = [
+            [fill for _ in range(self.deck.KEY_COLS)] for _ in range(self.deck.KEY_ROWS)
+        ]
         self.display_board(self.board)
 
     def create_board_from_strings(self, lines: list[str], fill: str = " ") -> None:
@@ -650,7 +680,9 @@ class MacroDeck:
         if self.board is None:
             self.create_board(fill)
 
-        new_board = [[fill for _ in range(self.deck.KEY_COLS)] for _ in range(self.deck.KEY_ROWS)]
+        new_board = [
+            [fill for _ in range(self.deck.KEY_COLS)] for _ in range(self.deck.KEY_ROWS)
+        ]
 
         for r in range(self.deck.KEY_ROWS):
             for c in range(self.deck.KEY_COLS):
@@ -662,7 +694,9 @@ class MacroDeck:
         self.board = new_board
         self.refresh_board()
 
-    def draw_rect(self, top: int, left: int, height: int, width: int, char: str) -> None:
+    def draw_rect(
+        self, top: int, left: int, height: int, width: int, char: str
+    ) -> None:
         """Draw a rectangle on the board using ``char``."""
         if self.board is None:
             self.create_board()
@@ -681,7 +715,9 @@ class MacroDeck:
                 if 0 <= top + height - 1 < self.deck.KEY_ROWS:
                     self.set_board_char(top + height - 1, c, char)
 
-    def fill_rect(self, top: int, left: int, height: int, width: int, char: str) -> None:
+    def fill_rect(
+        self, top: int, left: int, height: int, width: int, char: str
+    ) -> None:
         """Fill a rectangular region on the board with ``char``."""
         if self.board is None:
             self.create_board()
@@ -708,7 +744,10 @@ class MacroDeck:
         dc = end_col - start_col
         steps = max(abs(dr), abs(dc))
         if steps == 0:
-            if 0 <= start_row < self.deck.KEY_ROWS and 0 <= start_col < self.deck.KEY_COLS:
+            if (
+                0 <= start_row < self.deck.KEY_ROWS
+                and 0 <= start_col < self.deck.KEY_COLS
+            ):
                 self.set_board_char(start_row, start_col, char)
             return
 
@@ -733,8 +772,7 @@ class MacroDeck:
     def create_image_board(self, fill: bytes | None = None) -> None:
         """Create an internal image board and display it."""
         self.image_board = [
-            [fill for _ in range(self.deck.KEY_COLS)]
-            for _ in range(self.deck.KEY_ROWS)
+            [fill for _ in range(self.deck.KEY_COLS)] for _ in range(self.deck.KEY_ROWS)
         ]
         self.display_image_board(self.image_board)
 
@@ -793,7 +831,9 @@ class MacroDeck:
                     if self.deck.is_visual():
                         self.deck.set_key_image(self.position_to_key(rr, cc), image)
 
-    def scroll_image_board(self, dx: int = 0, dy: int = 0, fill: bytes | None = None) -> None:
+    def scroll_image_board(
+        self, dx: int = 0, dy: int = 0, fill: bytes | None = None
+    ) -> None:
         """Scroll the image board by ``(dx, dy)`` and fill empty cells with ``fill``."""
         if self.image_board is None:
             self.create_image_board(fill)
@@ -902,6 +942,7 @@ class MacroDeck:
 
     # Internal handlers ---------------------------------------------------
     def _run_action(self, action: Callable | str, *args: Any) -> None:
+        """Execute ``action`` if macros are enabled."""
         if not self.enabled:
             return
 
@@ -912,6 +953,7 @@ class MacroDeck:
 
     # Internal helpers ---------------------------------------------------
     def _build_image(self, path: str | None, text: str | None) -> bytes | None:
+        """Create a native key image from ``path`` or ``text``."""
         if path is None and text is None:
             return None
 
@@ -924,11 +966,18 @@ class MacroDeck:
         if text:
             draw = ImageDraw.Draw(image)
             font = ImageFont.load_default()
-            draw.text((image.width / 2, image.height / 2), text=text, anchor="mm", fill="white", font=font)
+            draw.text(
+                (image.width / 2, image.height / 2),
+                text=text,
+                anchor="mm",
+                fill="white",
+                font=font,
+            )
 
         return PILHelper.to_native_key_format(self.deck, image)
 
     def _handle_key(self, deck: StreamDeck, key: int, state: bool) -> None:
+        """Internal key event handler."""
         config = self.key_configs.get(key)
         if config:
             if state and config.get("down_image") is not None:
@@ -941,12 +990,18 @@ class MacroDeck:
             if action is not None:
                 self._run_action(action)
 
-    def _handle_dial(self, deck: StreamDeck, dial: int, event: DialEventType, value: Any) -> None:
+    def _handle_dial(
+        self, deck: StreamDeck, dial: int, event: DialEventType, value: Any
+    ) -> None:
+        """Internal dial event handler."""
         action = self.dial_macros.get((dial, event))
         if action is not None:
             self._run_action(action, value)
 
-    def _handle_touch(self, deck: StreamDeck, event: TouchscreenEventType, data: Any) -> None:
+    def _handle_touch(
+        self, deck: StreamDeck, event: TouchscreenEventType, data: Any
+    ) -> None:
+        """Internal touchscreen event handler."""
         action = self.touch_macros.get(event)
         if action is not None:
             self._run_action(action, data)

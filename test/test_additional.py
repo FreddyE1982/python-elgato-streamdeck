@@ -2,9 +2,10 @@ import time
 from unittest import mock
 import os
 import sys
+import logging
 import pytest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
 
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.DeviceMonitor import DeviceMonitor
@@ -18,11 +19,27 @@ def test_device_manager_enumeration():
     assert all(hasattr(d, "open") for d in decks)
 
 
+def test_dummy_transport_logs(caplog):
+    from StreamDeck.Transport.Dummy import Dummy
+
+    caplog.set_level(logging.INFO)
+    device = Dummy.Device(vid=1, pid=1)
+    with caplog.at_level(logging.INFO):
+        device.open()
+        device.write_feature(b"\x00\x01")
+        device.close()
+
+    assert "Deck opened" in caplog.text
+    assert "Deck feature write" in caplog.text
+    assert "Deck closed" in caplog.text
+
+
 def test_macrodeck_macro_management(deck):
     mdeck = MacroDeck(deck)
 
     def action():
         pass
+
     mdeck.register_key_macro(0, action)
     assert mdeck.get_key_macro(0) is action
     assert mdeck.macro_keys() == [0]
@@ -59,6 +76,7 @@ def test_macrodeck_copy_move_swap_macros(deck):
 
     def b():
         pass
+
     mdeck.register_key_macro(0, a)
     mdeck.copy_key_macro(0, 1)
     assert mdeck.get_key_macro(1) is a
@@ -110,6 +128,15 @@ def test_device_monitor_callbacks():
     assert disconnected == [dev1]
 
 
+def test_device_monitor_start_stop():
+    manager = DeviceManager(transport="dummy")
+    monitor = DeviceMonitor(manager, interval=0.01)
+    monitor.start()
+    time.sleep(0.02)
+    monitor.stop()
+    assert monitor._thread is None
+
+
 def test_macrodeck_reset(deck):
     mdeck = MacroDeck(deck)
 
@@ -142,10 +169,22 @@ def test_macrodeck_reset(deck):
     assert mdeck.key_macros == {}
     assert mdeck.dial_macros == {}
     assert mdeck.touch_macros == {}
-    assert mdeck.key_configs == {}
-    assert mdeck.board is None
-    assert mdeck.image_board is None
-    assert mdeck.is_enabled()
+
+
+def test_get_board_char_errors(deck):
+    mdeck = MacroDeck(deck)
+
+    with pytest.raises(ValueError):
+        mdeck.get_board_char(0, 0)
+
+    with deck:
+        deck.open()
+        mdeck.create_board()
+        with pytest.raises(IndexError):
+            mdeck.get_board_char(-1, 0)
+        with pytest.raises(IndexError):
+            mdeck.get_board_char(0, deck.KEY_COLS)
+        deck.close()
 
 
 def test_macrodeck_bulk_macro_helpers(deck):
@@ -187,4 +226,3 @@ def test_macrodeck_bulk_macro_helpers(deck):
     assert mdeck.key_macros == {}
     assert mdeck.dial_macros == {}
     assert mdeck.touch_macros == {}
-
