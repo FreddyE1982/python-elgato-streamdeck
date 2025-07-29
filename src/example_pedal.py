@@ -11,12 +11,21 @@
 
 import threading
 
+from StreamDeck.Devices.StreamDeck import StreamDeck
+
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.Transport.Transport import TransportError
 
 
-def key_change_callback(deck, key, state):
-    print("Deck {} Key {} = {}".format(deck.id(), key, "down" if state else "up"), flush=True)
+def key_change_callback(deck: StreamDeck, key: int, state: bool) -> None:
+    print(
+        "Deck {} Key {} = {}".format(
+            deck.id(),
+            key,
+            "down" if state else "up",
+        ),
+        flush=True,
+    )
 
 
 if __name__ == "__main__":

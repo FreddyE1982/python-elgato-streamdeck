@@ -14,14 +14,14 @@ The following steps are ordered from simple documentation updates to complex arc
 10. Add missing docstrings to all example scripts. **complete**
 11. Enable strict linting rules by adjusting `.flake8` ignores. **complete**
 12. Add type hints to all functions in `src/example_basic.py`. **complete**
-13. Apply type hints to remaining example scripts.
+13. Apply type hints to remaining example scripts. **complete**
 14. Add `mypy` configuration and initial check in CI.
-15. Create a CONTRIBUTING guide outlining development workflow.
-16. Update `setup.py` classifiers for supported Python versions.
+15. Create a CONTRIBUTING guide outlining development workflow. **complete**
+16. Update `setup.py` classifiers for supported Python versions. **complete**
 17. Add `__all__` definitions to modules missing them.
-18. Document available transports in `README.md`.
-19. Create a script to list connected Stream Decks.
-20. Add unit tests for `DeviceManager.enumerate` using dummy transport.
+18. Document available transports in `README.md`. **complete**
+19. Create a script to list connected Stream Decks. **complete**
+20. Add unit tests for `DeviceManager.enumerate` using dummy transport. **complete**
 21. Document testing instructions in `README.md`.
 22. Provide example images in a dedicated `assets` section of docs.
 23. Document environment variables used by the library.

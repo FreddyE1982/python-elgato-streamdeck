@@ -17,6 +17,7 @@ from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.ImageHelpers import PILHelper
 from StreamDeck.Transport.Transport import TransportError
+from StreamDeck.Devices.StreamDeck import StreamDeck
 
 # Folder location of image assets used by this example.
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
@@ -24,7 +25,9 @@ ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
 
 # Generates a custom tile with run-time generated text and custom image via the
 # PIL module.
-def render_key_image(deck, icon_filename, font_filename, label_text):
+def render_key_image(
+    deck: StreamDeck, icon_filename: str, font_filename: str, label_text: str
+) -> bytes:
     # Resize the source image asset to best-fit the dimensions of a single key,
     # leaving a margin at the bottom so that we can draw the key title
     # afterwards.
@@ -41,7 +44,7 @@ def render_key_image(deck, icon_filename, font_filename, label_text):
 
 
 # Generate an image for the screen
-def render_screen_image(deck, font_filename, text):
+def render_screen_image(deck: StreamDeck, font_filename: str, text: str) -> bytes:
     image = PILHelper.create_screen_image(deck)
     # Load a custom TrueType font and use it to create an image
     draw = ImageDraw.Draw(image)
@@ -52,7 +55,7 @@ def render_screen_image(deck, font_filename, text):
 
 
 # Returns styling information for a key based on its position and state.
-def get_key_style(deck, key, state):
+def get_key_style(deck: StreamDeck, key: int, state: bool) -> dict[str, str]:
     # Last button in the example application is the exit button.
     exit_key_index = deck.key_count() - 1
 
@@ -77,7 +80,7 @@ def get_key_style(deck, key, state):
 
 # Creates a new key image based on the key index, style and current key state
 # and updates the image on the StreamDeck.
-def update_key_image(deck, key, state):
+def update_key_image(deck: StreamDeck, key: int, state: bool) -> None:
     # Determine what icon and label to use on the generated key.
     key_style = get_key_style(deck, key, state)
 
@@ -93,7 +96,7 @@ def update_key_image(deck, key, state):
 
 # Prints key state change information, updates the key image and performs any
 # associated actions when a key is pressed.
-def key_change_callback(deck, key, state):
+def key_change_callback(deck: StreamDeck, key: int, state: bool) -> None:
     # Print new key state
     print("Deck {} Key {} = {}".format(deck.id(), key, state), flush=True)
 
@@ -122,7 +125,7 @@ def key_change_callback(deck, key, state):
 
 
 # Set a random color for the specified key
-def set_random_touch_color(deck, key):
+def set_random_touch_color(deck: StreamDeck, key: int) -> None:
     r = random.randint(0, 255)
     g = random.randint(0, 255)
     b = random.randint(0, 255)

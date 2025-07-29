@@ -10,10 +10,11 @@
 """Enumerate connected devices and print their information."""
 
 from StreamDeck.DeviceManager import DeviceManager
+from StreamDeck.Devices.StreamDeck import StreamDeck
 
 
 # Prints diagnostic information about a given StreamDeck.
-def print_deck_info(index, deck):
+def print_deck_info(index: int, deck: StreamDeck) -> None:
     key_image_format = deck.key_image_format()
     touchscreen_image_format = deck.touchscreen_image_format()
 

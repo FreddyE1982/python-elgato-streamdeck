@@ -23,6 +23,7 @@ from PIL import Image, ImageSequence
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.ImageHelpers import PILHelper
 from StreamDeck.Transport.Transport import TransportError
+from StreamDeck.Devices.StreamDeck import StreamDeck
 
 # Folder location of image assets used by this example.
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
@@ -34,7 +35,7 @@ FRAMES_PER_SECOND = 30
 # Loads in a source image, extracts out the individual animation frames (if
 # any) and returns a list of animation frames in the StreamDeck device's
 # native image format.
-def create_animation_frames(deck, image_filename):
+def create_animation_frames(deck: StreamDeck, image_filename: str) -> list[bytes]:
     icon_frames = list()
 
     # Open the source image asset.
@@ -58,7 +59,7 @@ def create_animation_frames(deck, image_filename):
 
 
 # Closes the StreamDeck device on key state change.
-def key_change_callback(deck, key, state):
+def key_change_callback(deck: StreamDeck, key: int, state: bool) -> None:
     # Use a scoped-with on the deck to ensure we're the only thread using it
     # right now.
     with deck:
@@ -107,7 +108,7 @@ if __name__ == "__main__":
 
         # Helper function that will run a periodic loop which updates the
         # images on each key.
-        def animate(fps):
+        def animate(fps: int) -> None:
             # Convert frames per second to frame time in seconds.
             #
             # Frame time often cannot be fully expressed by a float type,

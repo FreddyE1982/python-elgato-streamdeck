@@ -13,7 +13,11 @@ import io
 
 from PIL import Image
 from StreamDeck.DeviceManager import DeviceManager
-from StreamDeck.Devices.StreamDeck import DialEventType, TouchscreenEventType
+from StreamDeck.Devices.StreamDeck import (
+    DialEventType,
+    TouchscreenEventType,
+    StreamDeck,
+)
 from StreamDeck.Transport.Transport import TransportError
 
 # Folder location of image assets used by this example.
@@ -39,14 +43,16 @@ img_pressed_bytes = img_byte_arr.getvalue()
 
 
 # callback when buttons are pressed or released
-def key_change_callback(deck, key, key_state):
+def key_change_callback(deck: StreamDeck, key: int, key_state: bool) -> None:
     print("Key: " + str(key) + " state: " + str(key_state))
 
     deck.set_key_image(key, img_pressed_bytes if key_state else img_released_bytes)
 
 
 # callback when dials are pressed or released
-def dial_change_callback(deck, dial, event, value):
+def dial_change_callback(
+    deck: StreamDeck, dial: int, event: DialEventType, value: int
+) -> None:
     if event == DialEventType.PUSH:
         print(f"dial pushed: {dial} state: {value}")
         if dial == 3 and value:
@@ -72,7 +78,9 @@ def dial_change_callback(deck, dial, event, value):
 
 
 # callback when lcd is touched
-def touchscreen_event_callback(deck, evt_type, value):
+def touchscreen_event_callback(
+    deck: StreamDeck, evt_type: TouchscreenEventType, value: dict[str, int]
+) -> None:
     if evt_type == TouchscreenEventType.SHORT:
         print("Short touch @ " + str(value['x']) + "," + str(value['y']))
 
